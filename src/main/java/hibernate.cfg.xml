@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+    <session-factory>
+
+        <!-- Database connection settings -->
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <!--   <property name="connection.driver_class">org.hsqldb.jdbcDriver</property>  -->
+        
+<!--         LOCAL -->
+        <property name="connection.url">jdbc:mysql://localhost:1818/cardreader</property>
+        <property name="connection.username">beaglebone</property>
+        <property name="connection.password">mdpnp</property>
+
+<!-- 		DEV - PREPRODUCCION -->
+<!-- 		<property name= name="connection.url">jdbc:mysql://localhost:3306/DB_name_dev</property> -->
+<!--         <property name="connection.username">root_dev</property> -->
+<!--         <property name="connection.password">password_dev</property> -->
+        
+        <!-- JDBC connection pool (use the built-in) -->
+        <property name="connection.pool_size">1</property>
+
+        <!-- SQL dialect -->
+<!--         <property name="dialect">org.hibernate.dialect.HSQLDialect</property> -->
+		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+<!-- 		<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" /> -->
+
+
+        <!-- Enable Hibernate's automatic session context management -->
+        <property name="current_session_context_class">thread</property>
+
+        <!-- Disable the second-level cache  -->
+        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+
+        <!-- Echo all executed SQL to stdout (Enable the logging of all the generated SQL statements to the console) -->
+        <property name="show_sql">true</property>
+        
+<!--         Format the generated SQL statement to make it more readable, but takes up more screen space -->
+        <property name="format_sql">true</property>
+        
+<!--         Hibernate will put comments inside all generated SQL statements to hint what’s the generated SQL trying to do -->
+        <property name="use_sql_comments">true</property>
+
+        <!-- Drop and re-create the database schema on startup -->
+<!--         <property name="hbm2ddl.auto">create</property> -->
+
+		<!-- List of mapping resources -->
+        <mapping resource="org/mdpnp/smartcardio/dto/card.hbm.xml"/>
+
+    </session-factory>
+
+</hibernate-configuration>

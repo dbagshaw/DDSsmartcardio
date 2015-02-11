@@ -1,0 +1,6 @@
+module smartcardio {
+  struct CardRead {
+    string<64> unique_identifier;
+  }; //@top-level true
+  const string CardReadTopic = "CardRead";
+};
