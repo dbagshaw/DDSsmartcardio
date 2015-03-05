@@ -58,23 +58,33 @@ public class AddCard {
 			System.out.println("Type User's Name");
 			Scanner input = new Scanner(System.in);
 			String name = input.next();
-			fileWriter(name, UID, masterTag);
+
+			System.out.println("Is This Person Allowed Clinical Access?");
+			// Scanner input2 = new Scanner(System.in);
+			String access = input.next();
+
+			System.out.println("");
+			fileWriter(access, name, UID, masterTag); // access may not be
+														// necessary here
 
 			// cardDto.setCardNumber(BCrypt.hashpw(UID, BCrypt.gensalt()));
 			input.close();
+			
+			addToDataBase(access, name, UID);
 
 		} else {
 			// if hashset does contain UID, remove it from the database
-			Remove.Remove(UID, masterTag);
+			Remove.Remove(UID);
 		}
 	}
 
-	public static void addToDataBase(String name, String UID) {
+	public static void addToDataBase(String access, String name, String UID) {
 		CardDTO cardDto = new CardDTO();
 		Manager myManager = new Manager();
 
 		cardDto.setUserName(name);
 		cardDto.setCardNumber(UID);
+		cardDto.setClinicalAccess(access);
 
 		myManager.create(cardDto);
 
@@ -85,40 +95,22 @@ public class AddCard {
 		boolean accessGranted = false;
 
 		Manager mg = new Manager();
-		List<CardDTO> myList = mg.findAll();
+		List<CardDTO> myList = mg.findByAll();
 
 		for (CardDTO card : myList)
 			if (card.getCardNumber().equals(UID))
 				accessGranted = true;
 
-		// String line;
-		// try (BufferedReader in = new BufferedReader(new
-		// FileReader(database));
-		// PrintWriter out = new PrintWriter(new BufferedWriter(
-		// new FileWriter(database, true)))) {
-		//
-		// // while ((line = in.readLine()) != null) {
-		// while (!accessGranted && ((line = in.readLine()) != null)) {
-		// if (!line.equals(""))
-		// accessGranted = BCrypt.checkpw(UID, line);
-		// // s.add(line);
-		// }
-		//
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// }
-
 		return accessGranted;
 	}
 
-	public static void fileWriter(String name, String UID, Boolean masterTag) {
+	public static void fileWriter(String access, String name, String UID,
+			Boolean masterTag) {
 		try (PrintWriter out = new PrintWriter(new BufferedWriter(
 				new FileWriter(database, true)))) {
 
 			out.println(BCrypt.hashpw(UID, BCrypt.gensalt()));
 			System.out.print(name + "'s Card Added to Database: ");
-			// Manager myManager = new Manager();
-			// myManager.create(cardDto);
 
 			try (PrintWriter actlog = new PrintWriter(new BufferedWriter(
 					new FileWriter(activity_log, true)))) {
@@ -127,8 +119,7 @@ public class AddCard {
 				e.printStackTrace();
 				System.out.println("NCP");
 			}
-			Log.dateTime(UID, name);
-			// s.add(line);
+			Log.dateTime(UID, name, null);
 
 		} catch (Exception e) {
 		}

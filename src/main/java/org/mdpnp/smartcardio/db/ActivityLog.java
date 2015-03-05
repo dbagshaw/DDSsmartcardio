@@ -24,7 +24,7 @@ public class ActivityLog {
 
 	String activity_log = "ActivityLog.csv";
 
-	public void dateTime(String UID, String name) {
+	public void dateTime(String UID, String name, String access) {
 		date.setTime(System.currentTimeMillis());
 		String stringDate = dateFormat.format(date);
 		String stringOutDate = dateOutFormat.format(date);
@@ -45,7 +45,7 @@ public class ActivityLog {
 				new FileWriter(activity_log, true)))) {
 			out.println(UID + "," + stringDate);
 			System.out.println(stringOutDate);
-			AddCard.addToDataBase(name, UID);
+			// AddCard.addToDataBase(access, name, UID);
 
 		} catch (IOException e) {
 			e.printStackTrace();

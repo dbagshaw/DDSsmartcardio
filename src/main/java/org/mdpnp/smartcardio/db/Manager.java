@@ -27,7 +27,6 @@ public class Manager {
 
 	public CardDTO create(CardDTO cardDto) {
 
-		// Long rowID = null; // table entry ID
 		Session session = null;
 		Transaction tx = null;
 
@@ -50,7 +49,7 @@ public class Manager {
 
 			cardDto.setCreationDate(new Date());
 			cardDto.setModificationDate(cardDto.getCreationDate());
-//			System.out.println(cardDto);
+			// System.out.println(cardDto);
 			session.save(cardDto);
 
 			// /TODO This could be a good candidate for saveOrUpdate, to create
@@ -60,19 +59,16 @@ public class Manager {
 		} catch (HibernateException e) {
 			if (null != tx) {
 				tx.rollback();
-				// rowID = null;
 			}
 			if (null != session) {
 				session.close();
 			}
-			// e.printStackTrace();
 			loggerManager.error(e.getMessage());
 			System.out.println(e.getMessage());
 
 		} catch (Exception e) {
 			if (null != tx) {
 				tx.rollback();
-				// rowID = null;
 			}
 			if (null != session) {
 				session.close();
@@ -85,8 +81,57 @@ public class Manager {
 				session.close();
 		}
 
-		// cardDto.setId(rowID);
 		return cardDto;
+	}
+
+	public boolean delete(CardDTO cardDto) { // need to make this
+												// method remove
+		// an entry from mySQL
+
+		// String SQL = "DELETE FROM employees WHERE cardnumber = '" + UID
+		// + "' ";
+
+		Session session = null;
+		Transaction tx = null;
+
+		try {
+			loggerManager.info("deleting card " + cardDto);
+			session = HibernateUtil.getSessionFactory().openSession();// .getCurrentSession();
+			tx = session.beginTransaction();
+			System.out.println("Trying to delete card with UID "
+					+ cardDto.getCardNumber());
+			session.delete(cardDto);
+
+			tx.commit();
+
+		} catch (HibernateException e) {
+			if (null != tx) {
+				tx.rollback();
+			}
+			if (null != session) {
+				session.close();
+			}
+			loggerManager.error(e.getMessage());
+			System.out.println(e.getMessage());
+			return false;
+
+		} catch (Exception e) {
+			if (null != tx) {
+				tx.rollback();
+			}
+			if (null != session) {
+				session.close();
+			}
+			loggerManager.error(e.getMessage());
+			System.out.println(e.getMessage());
+			return false;
+
+		} finally {
+			if (null != session && session.isOpen())
+				session.close();
+		}
+
+		return true;
 	}
 
 	public CardDTO update(CardDTO CardDto) {
@@ -110,7 +155,7 @@ public class Manager {
 		}
 	}
 
-	public CardDTO findByID(String username) {
+	public CardDTO findByName(String username) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			session.beginTransaction();
@@ -134,7 +179,7 @@ public class Manager {
 		}
 	}
 
-	public CardDTO findUID(String cardnumber) {
+	public CardDTO findByUID(String cardnumber) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			session.beginTransaction();
@@ -157,8 +202,32 @@ public class Manager {
 			return null;
 		}
 	}
-	
-	public List<CardDTO> findAll() {
+
+	public CardDTO findByAccess(String clinicalaccess) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+			session.beginTransaction();
+			Query query = session
+					.createQuery("from CardDTO where clinicalaccess = :clinicalaccess ");
+			query.setParameter("clinicalaccess", clinicalaccess);
+			@SuppressWarnings("unchecked")
+			List<CardDTO> cardList = query.list();
+			if (cardList.size() > 0)
+				return cardList.get(0);
+			else
+				return null;
+		} catch (HibernateException e) {
+			if (session.getTransaction() != null) {
+				session.getTransaction().rollback();
+				session.close();
+			}
+			e.printStackTrace();
+			loggerManager.error(e.getMessage());
+			return null;
+		}
+	}
+
+	public List<CardDTO> findByAll() {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			session.beginTransaction();

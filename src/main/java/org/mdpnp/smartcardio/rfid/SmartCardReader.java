@@ -69,7 +69,7 @@ public class SmartCardReader {
 
 		try {
 
-			LockUnlock.Lock();
+			LockUnlock.WindowLock();
 
 			// get the list of available terminals
 			TerminalFactory factory = TerminalFactory
@@ -104,7 +104,7 @@ public class SmartCardReader {
 				if (masterTag == true) {
 					terminal.waitForCardAbsent(0);
 					System.out
-							.print("Please Insert New Tag or Tap Again for Access\n");
+							.print("Please Present New Badge or Tap Again for Access\n");
 
 					try {
 						/**
