@@ -48,6 +48,13 @@ public class NotificationPopUp {
 		}.start();
 
 	}
+	
+	public static void MasterNotification(String ag){
+		frame.repaint();
+		frame.validate();
+		NotificationWindow();
+		messageLabel.setText(ag + "Master Key Card.");
+	}
 
 	public static void AccessGrantedNotification(String ag, String UID) {
 		CardDTO cardDto = manager.findByUID(UID);
@@ -62,7 +69,7 @@ public class NotificationPopUp {
 		frame.repaint();
 		frame.validate();
 		NotificationWindow();
-		messageLabel.setText(ad + "Unauthorized User");
+		messageLabel.setText(ad + "Unauthorized User.");
 	}
 
 	public static void InitialAccessDeniedNotification(String iad, String UID) {

@@ -26,6 +26,7 @@ public class LockUnlock {
 	static String buttonInfo2 = "By Using This Button, You Are Unlocking The System In An Emergency "
 			+ "And Your Credentials Will Be Logged Into A Database For Future Investigation. The "
 			+ "Supervisior Will Be Notified Immediately.";
+//	static boolean lock;
 
 	static String access;
 
@@ -55,7 +56,7 @@ public class LockUnlock {
 
 	}
 
-	public static void WindowLock() {
+	public static void WindowLock(boolean lock) {
 		Window();
 
 		dialog.setVisible(true);
@@ -66,6 +67,7 @@ public class LockUnlock {
 
 		// frame.setVisible(true);
 		// frame.setAlwaysOnTop(true);
+		lock = true;
 
 	}
 
@@ -74,7 +76,7 @@ public class LockUnlock {
 		/**
 		 * DISPOSE_ON_CLOSE closes the JDialog and allows the program to
 		 * continue to run. Alternatively, EXIT_ON_CLOSE closes the JDialog and
-		 * exits the program
+		 * exits the program.
 		 */
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		dialog.dispatchEvent(new WindowEvent(dialog, WindowEvent.WINDOW_CLOSING));
@@ -82,6 +84,8 @@ public class LockUnlock {
 		// frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		// frame.dispatchEvent(new WindowEvent(frame,
 		// WindowEvent.WINDOW_CLOSING));
+		
+//		return true;
 
 	}
 
@@ -122,5 +126,4 @@ public class LockUnlock {
 	 * screen since employees with clinical access will already be granted
 	 * access.
 	 */
-
 }

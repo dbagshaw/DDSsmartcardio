@@ -29,7 +29,7 @@ public class Authenticate {
 		CardDTO cardDto = manager.findByUID(UID);
 
 		if (masterTag == true)
-			AccessGranted(UID);
+			MasterKeyCardAccess(UID);
 		else {
 
 			Manager mg = new Manager();
@@ -49,11 +49,27 @@ public class Authenticate {
 	// LockUnlock.BreakGlass(UID, null);
 	// }
 
+	public boolean MasterKeyCardAccess(String UID) {
+		LockUnlock.WindowUnlock();
+		NotificationPopUp.MasterNotification(ag);
+		System.out.print(ag + "Master Key Card. ");
+		
+		try (PrintWriter actlog = new PrintWriter(new BufferedWriter(
+				new FileWriter(activity_log, true)))) {
+			actlog.print("Access Granted:,");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Log.dateTime(UID, null, null);
+		
+		accessGranted = true;
+		return accessGranted;
+	}
 	public boolean AccessGranted(String UID) {
 		CardDTO cardDto = manager.findByUID(UID);
 		LockUnlock.WindowUnlock();
 		NotificationPopUp.AccessGrantedNotification(ag, cardDto.getUserName());
-		System.out.print(ag + cardDto.getUserName());
+		System.out.print(ag + cardDto.getUserName() + ". ");
 
 		try (PrintWriter actlog = new PrintWriter(new BufferedWriter(
 				new FileWriter(activity_log, true)))) {
@@ -70,7 +86,8 @@ public class Authenticate {
 	public boolean InitialAccessDenied(String UID) {
 		CardDTO cardDto = manager.findByUID(UID);
 		LockUnlock.BreakGlass(cardDto.getCardNumber(), cardDto.getUserName());
-		NotificationPopUp.InitialAccessDeniedNotification(iad, cardDto.getUserName());
+		NotificationPopUp.InitialAccessDeniedNotification(iad,
+				cardDto.getUserName());
 		System.out.print(iad);
 
 		try (PrintWriter actlog = new PrintWriter(new BufferedWriter(
