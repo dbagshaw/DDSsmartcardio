@@ -61,7 +61,7 @@ public class NotificationPopUp {
 		frame.repaint();
 		frame.validate();
 		NotificationWindow();
-		messageLabel.setText(ag /*+ cardDto.getUserName()*/);
+		messageLabel.setText(ag + cardDto.getUserName());
 
 	}
 

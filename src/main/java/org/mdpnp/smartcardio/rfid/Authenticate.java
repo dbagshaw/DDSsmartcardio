@@ -68,7 +68,7 @@ public class Authenticate {
 	public boolean AccessGranted(String UID) {
 		CardDTO cardDto = manager.findByUID(UID);
 		LockUnlock.WindowUnlock();
-		NotificationPopUp.AccessGrantedNotification(ag, cardDto.getUserName());
+		NotificationPopUp.AccessGrantedNotification(ag, cardDto.getCardNumber());
 		System.out.print(ag + cardDto.getUserName() + ". ");
 
 		try (PrintWriter actlog = new PrintWriter(new BufferedWriter(
