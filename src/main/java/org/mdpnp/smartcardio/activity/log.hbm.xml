@@ -4,13 +4,16 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-	<class name="org.mdpnp.smartcardio.activity.ActivityLogger" table="activity_log">
+	<class name="org.mdpnp.smartcardio.activity.ActivityLogger"
+		table="activity_log">
 		<meta attribute="class-description">
 			This class contains the card info
 		</meta>
-		<id name="userName" column="username">
+		<id name="id" column="id">
+			<generator class="native" />
 		</id>
 
+		<property name="userName" column="username" />
 		<property name="date" column="date" />
 		<property name="emergencyButton" column="emergencybutton" />
 		<property name="access" column="access" />

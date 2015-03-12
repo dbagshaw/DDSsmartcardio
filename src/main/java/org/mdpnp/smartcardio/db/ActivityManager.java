@@ -17,46 +17,69 @@ public class ActivityManager {
 
 	public ActivityLogger create(ActivityLogger logger) {
 
-		Session session = null;
+		Session sessionTwo = null;
 		Transaction tx = null;
+		Long rowID = null;
 
 		try {
-			loggerManager.info("creating new activity log " + logger);
-			// session = HibernateUtil.getSessionFactory().openSession();
-			session = HibernateUtil.getSessionFactory().getCurrentSession();
+			// loggerManager.info("creating new activity log " + logger);
+			// sessionTwo = HibernateUtil.getSessionFactory().openSession();
+			sessionTwo = HibernateUtil.getSessionFactory().getCurrentSession();
 
-			tx = session.beginTransaction();
+			tx = sessionTwo.beginTransaction();
 
 			logger.setDate(new Date());
-			session.save(logger);
+
+			// sessionTwo.saveOrUpdate(logger);
+			rowID = (Long) sessionTwo.save(logger);
 
 			tx.commit();
+
+			// session.close();
 
 		} catch (HibernateException e) {
 			if (null != tx) {
 				tx.rollback();
-			}
-			if (null != session) {
-				session.close();
+				rowID = null;
 			}
 			loggerManager.error(e.getMessage());
-			System.out.println(e.getMessage());
-
 		} catch (Exception e) {
 			if (null != tx) {
 				tx.rollback();
-			}
-			if (null != session) {
-				session.close();
+				rowID = null;
 			}
 			loggerManager.error(e.getMessage());
-			System.out.println(e.getMessage());
-
-		} finally {
-			if (null != session && session.isOpen())
-				session.close();
 		}
 
+		// } catch (HibernateException e) {
+		// if (null != tx) {
+		// tx.rollback();
+		// rowID = null;
+		// }
+		// if (null != sessionTwo) {
+		// sessionTwo.close();
+		// }
+		// loggerManager.error(e.getMessage());
+		// // System.out.println(e.getMessage());
+		//
+		// } catch (Exception e) {
+		// if (null != tx) {
+		// tx.rollback();
+		// rowID = null;
+		// }
+		// if (null != sessionTwo) {
+		// sessionTwo.close();
+		// }
+		// loggerManager.error(e.getMessage());
+		// // System.out.println(e.getMessage());
+		//
+		// } finally {
+		// if (null != sessionTwo && sessionTwo.isOpen())
+		// sessionTwo.close();
+		// }
+
+		logger.setId(rowID);
+		// sessionTwo.close();
 		return logger;
 	}
 }

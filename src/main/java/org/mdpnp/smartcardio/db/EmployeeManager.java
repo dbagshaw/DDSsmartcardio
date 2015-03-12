@@ -31,61 +31,55 @@ public class EmployeeManager {
 		Transaction tx = null;
 
 		try {
-			loggerManager.info("creating new card " + cardDto);
+			// loggerManager.info("creating new card " + cardDto);
 			session = HibernateUtil.getSessionFactory().openSession();// .getCurrentSession();
-			// Is this an anti-pattern of opening and closing a Session for each
-			// database call in a single thread
-			// or is it OK because we are opening/closing (w/ the commit) the
-			// connection for each request (session per request)
-			// session is not thread safe, so maybe we should open close each
-			// connection per request.
-			// (see the nested exception problem)
-			// session = HibernateUtil.getSession();
-
-			// note 2: openSession() --> commit does NOT close session;
-			// getCurrentSession()--> commit closes session
+			/**
+			 * Is this an anti-pattern of opening and closing a Session for each
+			 * database call in a single thread or is it OK because we are
+			 * opening/closing (w/ the commit) the connection for each request
+			 * (session per request) session is not thread safe, so maybe we
+			 * should open close each connection per request. (see the nested
+			 * exception problem) session = HibernateUtil.getSession();
+			 * 
+			 * note 2: openSession() --> commit does NOT close session;
+			 * getCurrentSession()--> commit closes session
+			 * 
+			 */
 
 			tx = session.beginTransaction();
 
 			cardDto.setCreationDate(new Date());
 			cardDto.setModificationDate(cardDto.getCreationDate());
-			// System.out.println(cardDto);
 			session.save(cardDto);
 
 			// /TODO This could be a good candidate for saveOrUpdate, to create
 			// the card if it doesn't exit or update it if it does
 			tx.commit();
+			// session.close();
 
 		} catch (HibernateException e) {
-			if (null != tx) {
-				tx.rollback();
-			}
-			if (null != session) {
-				session.close();
-			}
+			/*
+			 * if (null != tx) { tx.rollback(); } if (null != session) {
+			 * session.close(); } loggerManager.error(e.getMessage()); //
+			 * System.out.println(e.getMessage());
+			 * 
+			 * } catch (Exception e) { if (null != tx) { tx.rollback(); } if
+			 * (null != session) { session.close(); }
+			 */
 			loggerManager.error(e.getMessage());
-			System.out.println(e.getMessage());
 
-		} catch (Exception e) {
-			if (null != tx) {
-				tx.rollback();
-			}
-			if (null != session) {
-				session.close();
-			}
-			loggerManager.error(e.getMessage());
-			System.out.println(e.getMessage());
-
-		} finally {
-			if (null != session && session.isOpen())
-				session.close();
+			/*
+			 * } finally { if (null != session && session.isOpen())
+			 * session.close();
+			 */
 		}
 
+		// session.close();
 		return cardDto;
 	}
 
 	public boolean delete(CardDTO cardDto) {
-											
+
 		Session session = null;
 		Transaction tx = null;
 

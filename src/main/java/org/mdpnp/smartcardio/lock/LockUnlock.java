@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 
 import org.mdpnp.smartcardio.activity.ActivityLog;
 import org.mdpnp.smartcardio.email.SendEmail;
+import org.mdpnp.smartcardio.email.SendText;
 
 public class LockUnlock {
 
@@ -99,8 +100,9 @@ public class LockUnlock {
 		emergency.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				WindowUnlock();
-				log.accessDeniedLog(cardnumber);
+				log.emergencyButtonLog(cardnumber);
 				SendEmail.Email(cardnumber, username);
+				// SendText.Sender(cardnumber);
 
 			}
 

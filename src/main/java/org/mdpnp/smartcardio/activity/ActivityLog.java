@@ -58,9 +58,7 @@ public class ActivityLog {
 
 	public ActivityLogger accessGrantedLog(String UID) {
 		ActivityManager aManager = new ActivityManager();
-		CardDTO cardDto = new CardDTO();
-		
-		cardDto = eManager.findByUID(UID);
+		CardDTO cardDto = eManager.findByUID(UID);
 		String username = cardDto.getUserName();
 		
 		ActivityLogger logger = new ActivityLogger();
@@ -70,14 +68,11 @@ public class ActivityLog {
 		
 		aManager.create(logger);
 		
-//		ActivityLogger logger = aManager.granted(null, username);
-		
 		return logger;
 	}
 
 	public ActivityLogger accessDeniedLog(String UID) {
 		ActivityManager aManager = new ActivityManager();
-		
 		CardDTO cardDto = eManager.findByUID(UID);
 		String username = cardDto.getUserName();
 		
@@ -88,14 +83,11 @@ public class ActivityLog {
 		
 		aManager.create(logger);
 		
-//		ActivityLogger logger = aManager.emergency(null, username);
-		
 		return logger;
 	}
 
 	public ActivityLogger emergencyButtonLog(String UID) {
 		ActivityManager aManager = new ActivityManager();
-		
 		CardDTO cardDto = eManager.findByUID(UID);
 		String username = cardDto.getUserName();
 		
@@ -105,8 +97,6 @@ public class ActivityLog {
 		logger.setAccess("Emergency Access Granted");
 		
 		aManager.create(logger);
-		
-//		ActivityLogger logger = aManager.emergency(null, username);
 		
 		return logger;
 	}
@@ -121,7 +111,20 @@ public class ActivityLog {
 		
 		aManager.create(logger);
 		
-//		ActivityLogger logger = aManager.unknown(null, UID);
+		return logger;
+	}
+	
+	public ActivityLogger windowLockLog(String UID) {
+		ActivityManager aManager = new ActivityManager();
+		CardDTO cardDto = eManager.findByUID(UID);
+		String username = cardDto.getUserName();
+		
+		ActivityLogger logger = new ActivityLogger();
+		logger.setEmergencyButton(false);
+		logger.setUserName(username);
+		logger.setAccess("Locked The System");
+		
+		aManager.create(logger);
 		
 		return logger;
 	}

@@ -13,6 +13,7 @@ public class SendEmail {
     private static String USER_NAME = "dmbaggy18@yahoo.com";
     private static String PASSWORD = "Adidas 18";
     private static String RECIPIENT = "bagshawd@wit.edu";
+    private static String RECIPIENT2 = "9782709328@vtext.com";
 
     
     //fix the null cardnumber
@@ -22,9 +23,9 @@ public class SendEmail {
     	manager.findByName(username);
         String from = USER_NAME;
         String pass = PASSWORD;
-        String[] to = { RECIPIENT }; // list of recipient email addresses
+        String[] to = { RECIPIENT, RECIPIENT2 }; // list of recipient email addresses
         String subject = "Emergency Override";
-        String body = username + " (" + cardnumber + ") " + "has used the Emergency button";
+        String body = username + " has used the emergency button.";
 
         sendFromYahoo(from, pass, to, subject, body);
     }

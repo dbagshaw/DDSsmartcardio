@@ -8,6 +8,7 @@ import javax.smartcardio.CardChannel;
 import javax.smartcardio.CardTerminal;
 import javax.smartcardio.TerminalFactory;
 
+import org.mdpnp.smartcardio.activity.ActivityLog;
 import org.mdpnp.smartcardio.lock.LockUnlock;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -132,6 +133,8 @@ public class SmartCardReader {
 					UID = bytesToHex(Read.Reader(terminal).getData());
 					if (UID.equals(matcher)) {
 						LockUnlock.WindowLock(lock);
+						ActivityLog Log = new ActivityLog();
+						Log.windowLockLog(UID);
 					}
 				}
 
