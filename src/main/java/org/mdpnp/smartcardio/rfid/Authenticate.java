@@ -5,8 +5,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import org.mdpnp.smartcardio.db.ActivityLog;
-import org.mdpnp.smartcardio.db.Manager;
+import org.mdpnp.smartcardio.activity.ActivityLog;
+import org.mdpnp.smartcardio.db.EmployeeManager;
 import org.mdpnp.smartcardio.db.NotificationPopUp;
 import org.mdpnp.smartcardio.dto.CardDTO;
 import org.mdpnp.smartcardio.lock.LockUnlock;
@@ -23,17 +23,16 @@ public class Authenticate {
 
 	Boolean accessGranted;
 
-	Manager manager = new Manager();
+	EmployeeManager eManager = new EmployeeManager();
 
 	public void Access(String UID, Boolean masterTag) {
-		CardDTO cardDto = manager.findByUID(UID);
+		CardDTO cardDto = eManager.findByUID(UID);
 
 		if (masterTag == true)
 			MasterKeyCardAccess(UID);
 		else {
 
-			Manager mg = new Manager();
-			CardDTO myList = mg.findByUID(UID);
+			CardDTO myList = eManager.findByUID(UID);
 
 			if (myList == null)
 				AccessDenied(UID);
@@ -45,14 +44,13 @@ public class Authenticate {
 
 	}
 
-	// if (!accessGranted) {
-	// LockUnlock.BreakGlass(UID, null);
-	// }
-
 	public boolean MasterKeyCardAccess(String UID) {
 		LockUnlock.WindowUnlock();
 		NotificationPopUp.MasterNotification(ag);
 		System.out.print(ag + "Master Key Card. ");
+		
+//		Log.accessGrantedLog();
+		
 		
 		try (PrintWriter actlog = new PrintWriter(new BufferedWriter(
 				new FileWriter(activity_log, true)))) {
@@ -66,11 +64,14 @@ public class Authenticate {
 		return accessGranted;
 	}
 	public boolean AccessGranted(String UID) {
-		CardDTO cardDto = manager.findByUID(UID);
+		CardDTO cardDto = eManager.findByUID(UID);
 		LockUnlock.WindowUnlock();
+		String username = cardDto.getUserName();
 		NotificationPopUp.AccessGrantedNotification(ag, cardDto.getCardNumber());
-		System.out.print(ag + cardDto.getUserName() + ". ");
+		System.out.print(ag + username + ". ");
 
+		Log.accessGrantedLog(UID);
+		
 		try (PrintWriter actlog = new PrintWriter(new BufferedWriter(
 				new FileWriter(activity_log, true)))) {
 			actlog.print("Access Granted:,");
@@ -84,11 +85,16 @@ public class Authenticate {
 	}
 
 	public boolean InitialAccessDenied(String UID) {
-		CardDTO cardDto = manager.findByUID(UID);
-		LockUnlock.BreakGlass(cardDto.getCardNumber(), cardDto.getUserName());
+		CardDTO cardDto = eManager.findByUID(UID);
+		String username = cardDto.getUserName();
+		
+		LockUnlock.BreakGlass(cardDto.getCardNumber(), username);
+		
 		NotificationPopUp.InitialAccessDeniedNotification(iad,
-				cardDto.getUserName());
-		System.out.print(iad);
+				cardDto.getCardNumber());
+		System.out.print(iad + username + ". ");
+		
+		Log.accessDeniedLog(UID);
 
 		try (PrintWriter actlog = new PrintWriter(new BufferedWriter(
 				new FileWriter(activity_log, true)))) {
@@ -106,6 +112,8 @@ public class Authenticate {
 	public boolean AccessDenied(String UID) {
 		NotificationPopUp.AccessDeniedNotification(ad, UID);
 		System.out.print(ad);
+		
+		Log.unknownDeniedLog(UID);
 
 		try (PrintWriter actlog = new PrintWriter(new BufferedWriter(
 				new FileWriter(activity_log, true)))) {

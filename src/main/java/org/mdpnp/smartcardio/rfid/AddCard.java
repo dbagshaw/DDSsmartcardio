@@ -7,8 +7,8 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Scanner;
 
-import org.mdpnp.smartcardio.db.ActivityLog;
-import org.mdpnp.smartcardio.db.Manager;
+import org.mdpnp.smartcardio.activity.ActivityLog;
+import org.mdpnp.smartcardio.db.EmployeeManager;
 import org.mdpnp.smartcardio.dto.CardDTO;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -16,6 +16,7 @@ public class AddCard {
 
 	static RemoveCard Remove = new RemoveCard();
 	static ActivityLog Log = new ActivityLog();
+	static EmployeeManager eManager = new EmployeeManager();
 
 	static String database = "key_database.csv";
 	static String activity_log = "ActivityLog.csv";
@@ -57,11 +58,18 @@ public class AddCard {
 		if (!accessGranted) {
 			System.out.println("Type User's Name");
 			Scanner input = new Scanner(System.in);
-			String name = input.next();
+			String name = input.nextLine();
 
 			System.out.println("Is This Person Allowed Clinical Access?");
 			// Scanner input2 = new Scanner(System.in);
-			String access = input.next();
+			String access = input.next().toLowerCase();
+
+			if (access.startsWith("y"))
+				access = "y";
+			else if (access.startsWith("n"))
+				access = "n";
+
+			System.out.println(access);
 
 			System.out.println("");
 			fileWriter(access, name, UID, masterTag); // access may not be
@@ -69,7 +77,7 @@ public class AddCard {
 
 			// cardDto.setCardNumber(BCrypt.hashpw(UID, BCrypt.gensalt()));
 			input.close();
-			
+
 			addToDataBase(access, name, UID);
 
 		} else {
@@ -80,25 +88,22 @@ public class AddCard {
 
 	public static void addToDataBase(String access, String name, String UID) {
 		CardDTO cardDto = new CardDTO();
-		Manager myManager = new Manager();
 
 		cardDto.setUserName(name);
 		cardDto.setCardNumber(UID);
 		cardDto.setClinicalAccess(access);
 
-		myManager.create(cardDto);
-
+		eManager.create(cardDto);
 	}
 
 	public static boolean fileReader(String UID) {
 
 		boolean accessGranted = false;
 
-		Manager mg = new Manager();
-		List<CardDTO> myList = mg.findByAll();
+		List<CardDTO> myList = eManager.findByAll();
 
-		for (CardDTO card : myList)
-			if (card.getCardNumber().equals(UID))
+		for (CardDTO cardDto : myList)
+			if (cardDto.getCardNumber().equals(UID))
 				accessGranted = true;
 
 		return accessGranted;

@@ -1,11 +1,11 @@
-package com.mdpnp.smartcardio.email;
+package org.mdpnp.smartcardio.email;
 
 import java.util.*;
 
 import javax.mail.*;
 import javax.mail.internet.*;
 
-import org.mdpnp.smartcardio.db.Manager;
+import org.mdpnp.smartcardio.db.EmployeeManager;
 import org.mdpnp.smartcardio.db.NotificationPopUp;
 
 public class SendEmail {
@@ -17,7 +17,7 @@ public class SendEmail {
     
     //fix the null cardnumber
     public static void Email(String cardnumber, String username) {
-    	Manager manager = new Manager();
+    	EmployeeManager manager = new EmployeeManager();
     	manager.findByUID(cardnumber);
     	manager.findByName(username);
         String from = USER_NAME;

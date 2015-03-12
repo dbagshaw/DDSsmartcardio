@@ -19,11 +19,11 @@ import org.slf4j.LoggerFactory;
  * 
  */
 
-public class Manager {
+public class EmployeeManager {
 
 	// Logger
 	private static Logger loggerManager = LoggerFactory
-			.getLogger(Manager.class);
+			.getLogger(EmployeeManager.class);
 
 	public CardDTO create(CardDTO cardDto) {
 
@@ -84,13 +84,8 @@ public class Manager {
 		return cardDto;
 	}
 
-	public boolean delete(CardDTO cardDto) { // need to make this
-												// method remove
-		// an entry from mySQL
-
-		// String SQL = "DELETE FROM employees WHERE cardnumber = '" + UID
-		// + "' ";
-
+	public boolean delete(CardDTO cardDto) {
+											
 		Session session = null;
 		Transaction tx = null;
 

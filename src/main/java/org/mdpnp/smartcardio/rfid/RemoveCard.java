@@ -1,16 +1,12 @@
 package org.mdpnp.smartcardio.rfid;
 
-/**
- * need to update this class so it removes UIDs from mySQL
- */
-
-import org.mdpnp.smartcardio.db.ActivityLog;
-import org.mdpnp.smartcardio.db.Manager;
+import org.mdpnp.smartcardio.activity.ActivityLog;
+import org.mdpnp.smartcardio.db.EmployeeManager;
 import org.mdpnp.smartcardio.dto.CardDTO;
 
 public class RemoveCard {
 
-	Manager myManager = new Manager();
+	EmployeeManager manager = new EmployeeManager();
 	ActivityLog Log = new ActivityLog();
 	String database = "key_database.csv";
 	String activity_log = "ActivityLog.csv";
@@ -18,6 +14,6 @@ public class RemoveCard {
 	public void Remove(String UID) {
 		CardDTO cardDto = new CardDTO();
 		cardDto.setCardNumber(UID);
-		myManager.delete(cardDto);
+		manager.delete(cardDto);
 			}
 }

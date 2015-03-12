@@ -13,7 +13,8 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import com.mdpnp.smartcardio.email.SendEmail;
+import org.mdpnp.smartcardio.activity.ActivityLog;
+import org.mdpnp.smartcardio.email.SendEmail;
 
 public class LockUnlock {
 
@@ -42,7 +43,7 @@ public class LockUnlock {
 		emergency.setFont(new Font("sansserif", Font.BOLD, 40));
 		emergency.setForeground(Color.WHITE);
 		emergency.setBackground(Color.RED);
-		emergency.setToolTipText(buttonInfo2);
+		emergency.setToolTipText(buttonInfo1);
 		panel.add(emergency);
 
 		dialog.add(panel, BorderLayout.SOUTH);
@@ -90,13 +91,15 @@ public class LockUnlock {
 	}
 
 	public static void BreakGlass(final String cardnumber, final String username) {
-
+		final ActivityLog log = new ActivityLog();
+		
 		emergency.setVisible(true);
 		dialog.validate();
 		// frame.validate();
 		emergency.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				WindowUnlock();
+				log.accessDeniedLog(cardnumber);
 				SendEmail.Email(cardnumber, username);
 
 			}
@@ -105,7 +108,7 @@ public class LockUnlock {
 
 		/**
 		 * Add action listener to button. If pressed call @WindowUnlock method
-		 * and log activity. Send notification to my phone/email.
+		 * and log activity. Send notification to my phone.
 		 */
 
 	}
@@ -118,12 +121,5 @@ public class LockUnlock {
 	 * the screen. Pressing the button will unlock the system and log the users
 	 * card data.
 	 * 
-	 * Things to consider: Any card not in the database that is presented to the
-	 * reader will display the emergency override button so 2 databases may be
-	 * needed. One containing all hospital employee badges and a second
-	 * containing badges of employees eligible for clinical access. Thus, only
-	 * employee badges that do not have clinical access can override the lock
-	 * screen since employees with clinical access will already be granted
-	 * access.
 	 */
 }

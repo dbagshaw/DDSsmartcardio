@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.WindowConstants;
@@ -15,7 +16,7 @@ public class NotificationPopUp {
 	static String header = "Notification";
 	static JFrame frame = new JFrame();
 	static JLabel messageLabel = new JLabel();
-	static Manager manager = new Manager();
+	static EmployeeManager manager = new EmployeeManager();
 
 	// static GridBagConstraints constraints = new GridBagConstraints();
 
@@ -77,7 +78,7 @@ public class NotificationPopUp {
 		frame.repaint();
 		frame.validate();
 		NotificationWindow();
-		messageLabel.setText(iad /*+ cardDto.getUserName()*/);
+		messageLabel.setText(iad + cardDto.getUserName());
 	}
 
 	public static void NotificationSent(String notice) {

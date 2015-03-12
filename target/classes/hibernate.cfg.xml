@@ -5,52 +5,58 @@
 
 <hibernate-configuration>
 
-    <session-factory>
+	<session-factory>
 
-        <!-- Database connection settings -->
-        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-        <!--   <property name="connection.driver_class">org.hsqldb.jdbcDriver</property>  -->
-        
-<!--         LOCAL -->
-        <property name="connection.url">jdbc:mysql://localhost:1818/cardreader</property>
-        <property name="connection.username">beaglebone</property>
-        <property name="connection.password">mdpnp</property>
+		<!-- Database connection settings -->
+		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+		<!-- <property name="connection.driver_class">org.hsqldb.jdbcDriver</property> -->
 
-<!-- 		DEV - PREPRODUCCION -->
-<!-- 		<property name= name="connection.url">jdbc:mysql://localhost:3306/DB_name_dev</property> -->
-<!--         <property name="connection.username">root_dev</property> -->
-<!--         <property name="connection.password">password_dev</property> -->
-        
-        <!-- JDBC connection pool (use the built-in) -->
-        <property name="connection.pool_size">1</property>
+		<!-- LOCAL -->
+		<property name="connection.url">jdbc:mysql://localhost:1818/cardreader</property>
+		<property name="connection.username">beaglebone</property>
+		<property name="connection.password">mdpnp</property>
 
-        <!-- SQL dialect -->
-<!--         <property name="dialect">org.hibernate.dialect.HSQLDialect</property> -->
+		<!-- DEV - PREPRODUCCION -->
+		<!-- <property name= name="connection.url">jdbc:mysql://localhost:3306/DB_name_dev</property> -->
+		<!-- <property name="connection.username">root_dev</property> -->
+		<!-- <property name="connection.password">password_dev</property> -->
+
+		<!-- JDBC connection pool (use the built-in) -->
+		<property name="connection.pool_size">1</property>
+
+		<!-- SQL dialect -->
+		<!-- <property name="dialect">org.hibernate.dialect.HSQLDialect</property> -->
 		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
-<!-- 		<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" /> -->
+		<!-- <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" 
+			/> -->
 
 
-        <!-- Enable Hibernate's automatic session context management -->
-        <property name="current_session_context_class">thread</property>
+		<!-- Enable Hibernate's automatic session context management -->
+		<property name="current_session_context_class">thread</property>
 
-        <!-- Disable the second-level cache  -->
-        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+		<!-- Disable the second-level cache -->
+		<property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
 
-        <!-- Echo all executed SQL to stdout (Enable the logging of all the generated SQL statements to the console) -->
-        <property name="show_sql">false</property>
-        
-<!--         Format the generated SQL statement to make it more readable, but takes up more screen space -->
-        <property name="format_sql">true</property>
-        
-<!--         Hibernate will put comments inside all generated SQL statements to hint what’s the generated SQL trying to do -->
-        <property name="use_sql_comments">true</property>
+		<!-- Echo all executed SQL to stdout (Enable the logging of all the generated 
+			SQL statements to the console) -->
+		<property name="show_sql">false</property>
 
-        <!-- Drop and re-create the database schema on startup -->
-<!--         <property name="hbm2ddl.auto">create</property> -->
+		<!-- Format the generated SQL statement to make it more readable, but takes 
+			up more screen space -->
+		<property name="format_sql">true</property>
+
+		<!-- Hibernate will put comments inside all generated SQL statements to 
+			hint what’s the generated SQL trying to do -->
+		<property name="use_sql_comments">true</property>
+
+		<!-- Drop and re-create the database schema on startup -->
+		<!-- <property name="hbm2ddl.auto">create</property> -->
 
 		<!-- List of mapping resources -->
-        <mapping resource="org/mdpnp/smartcardio/dto/card.hbm.xml"/>
+		<mapping resource="org/mdpnp/smartcardio/dto/card.hbm.xml" />
+		<mapping resource="org/mdpnp/smartcardio/activity/log.hbm.xml" />
 
-    </session-factory>
+
+	</session-factory>
 
 </hibernate-configuration>
