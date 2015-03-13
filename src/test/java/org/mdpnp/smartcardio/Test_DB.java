@@ -1,9 +1,11 @@
+package org.mdpnp.smartcardio;
+
 import java.util.List;
 
 import javax.smartcardio.CardTerminal;
 import javax.smartcardio.TerminalFactory;
 
-import org.mdpnp.smartcardio.db.Manager;
+import org.mdpnp.smartcardio.db.EmployeeManager;
 import org.mdpnp.smartcardio.dto.CardDTO;
 import org.mdpnp.smartcardio.rfid.ReadCard;
 import org.mdpnp.smartcardio.util.HibernateUtil;
@@ -16,7 +18,7 @@ public class Test_DB {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		Manager mg = new Manager();
+		EmployeeManager mg = new EmployeeManager();
 
 		CardDTO cardDto = new CardDTO();
 		cardDto.setUserName("testuser");
@@ -36,7 +38,7 @@ public class Test_DB {
 
 			String UID = bytesToHex(Read.Reader(terminal).getData());
 			
-			List<CardDTO> myList = mg.findAll();
+			List<CardDTO> myList = mg.findByAll();
 			// System.out.println(card.getCardNumber());
 			for (CardDTO card : myList)
 				if (!myList.contains(UID)) {
