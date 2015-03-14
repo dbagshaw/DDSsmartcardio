@@ -21,8 +21,9 @@ public class Test_DB {
 		EmployeeManager mg = new EmployeeManager();
 
 		CardDTO cardDto = new CardDTO();
-		cardDto.setUserName("testuser");
-		cardDto.setCardNumber("000001");
+		cardDto.setUserName("testuser2");
+		cardDto.setCardNumber("000002");
+		cardDto.setClinicalAccess("y");
 
 		mg.create(cardDto);
 

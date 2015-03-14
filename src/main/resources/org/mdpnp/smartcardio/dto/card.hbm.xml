@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="org.mdpnp.smartcardio.dto.CardDTO" table="employees">
+		<meta attribute="class-description">
+			This class contains the card info
+		</meta>
+		<id name="cardNumber" column="cardnumber">
+		</id>
+
+		<property name="userName" column="username" />
+		<property name="creationDate" column="creationdate" />
+		<property name="modificationDate" column="modificationdate" />
+		<property name="clinicalAccess" column="clinicalaccess" />
+	</class>
+</hibernate-mapping>
