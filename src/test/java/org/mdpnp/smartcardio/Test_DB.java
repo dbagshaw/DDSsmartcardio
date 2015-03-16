@@ -1,9 +1,20 @@
+<<<<<<< HEAD:src.test.java/Test_DB.java
 import java.util.Date;
+=======
+package org.mdpnp.smartcardio;
+
+import java.util.List;
+>>>>>>> 088d9e5c9b2adccbc548ec6a7f4464cb21851346:src/test/java/org/mdpnp/smartcardio/Test_DB.java
 
 import javax.smartcardio.CardTerminal;
 
+<<<<<<< HEAD:src.test.java/Test_DB.java
 import org.mdpnp.smartcardio.activity.ActivityLogger;
 import org.mdpnp.smartcardio.db.ActivityManager;
+=======
+import org.mdpnp.smartcardio.db.EmployeeManager;
+import org.mdpnp.smartcardio.dto.CardDTO;
+>>>>>>> 088d9e5c9b2adccbc548ec6a7f4464cb21851346:src/test/java/org/mdpnp/smartcardio/Test_DB.java
 import org.mdpnp.smartcardio.rfid.ReadCard;
 import org.mdpnp.smartcardio.util.HibernateUtil;
 
@@ -15,6 +26,7 @@ public class Test_DB {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
+<<<<<<< HEAD:src.test.java/Test_DB.java
 		/*EmployeeManager manager = new EmployeeManager();
 
 		CardDTO cardDto = new CardDTO();
@@ -36,6 +48,18 @@ public class Test_DB {
 		
 		
 /*		try {
+=======
+		EmployeeManager mg = new EmployeeManager();
+
+		CardDTO cardDto = new CardDTO();
+		cardDto.setUserName("testuser2");
+		cardDto.setCardNumber("000002");
+		cardDto.setClinicalAccess("y");
+
+		mg.create(cardDto);
+
+		try {
+>>>>>>> 088d9e5c9b2adccbc548ec6a7f4464cb21851346:src/test/java/org/mdpnp/smartcardio/Test_DB.java
 
 			// get the list of available terminals
 			TerminalFactory factory = TerminalFactory
@@ -46,7 +70,11 @@ public class Test_DB {
 			terminal = (CardTerminal) terminalList.get(0);
 
 			String UID = bytesToHex(Read.Reader(terminal).getData());
+<<<<<<< HEAD:src.test.java/Test_DB.java
 
+=======
+			
+>>>>>>> 088d9e5c9b2adccbc548ec6a7f4464cb21851346:src/test/java/org/mdpnp/smartcardio/Test_DB.java
 			List<CardDTO> myList = mg.findByAll();
 			// System.out.println(card.getCardNumber());
 			for (CardDTO card : myList)

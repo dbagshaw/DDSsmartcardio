@@ -12,9 +12,9 @@
 		<!-- <property name="connection.driver_class">org.hsqldb.jdbcDriver</property> -->
 
 		<!-- LOCAL -->
-		<property name="connection.url">jdbc:mysql://localhost:1818/cardreader</property>
-		<property name="connection.username">beaglebone</property>
-		<property name="connection.password">mdpnp</property>
+		<property name="connection.url">jdbc:mysql://localhost:3306/cardreader</property>
+		<property name="connection.username">username</property>
+		<property name="connection.password">password</property>
 
 		<!-- DEV - PREPRODUCCION -->
 		<!-- <property name= name="connection.url">jdbc:mysql://localhost:3306/DB_name_dev</property> -->
@@ -39,7 +39,7 @@
 
 		<!-- Echo all executed SQL to stdout (Enable the logging of all the generated 
 			SQL statements to the console) -->
-		<property name="show_sql">false</property>
+		<property name="show_sql">true</property>
 
 		<!-- Format the generated SQL statement to make it more readable, but takes 
 			up more screen space -->
