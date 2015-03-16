@@ -36,35 +36,28 @@ public class SmartCardReader {
 	// static AESEncryption AES = new AESEncryption();
 	static boolean run = true;
 	static boolean lock = false;
-//	static String UID;
 
 	static String key = "key.txt";
 
 	public static void main(String[] args) {
 
-		try {
+		LockUnlock.WindowLock(lock);
 
-			LockUnlock.WindowLock(lock);
+		CardTerminal terminal = TerminalSetUp();
 
-			CardTerminal terminal = TerminalSetUp();
-
-			while (run) {
-
+		while (run) {
+			try {
 				// Makes UID a string variable
-				String UID = bytesToHex(Read.Reader(terminal).getData());
+				String UID = Read.getUID();
+				// String UID = bytesToHex(Read.Reader(terminal).getData());
 				// System.out.println(BCrypt.hashpw(UID, BCrypt.gensalt()));
 
 				/**
 				 * @DDS method creates a connection to Mongo DB server and
 				 *      publishes the card UID.
 				 */
-				DDS(UID);
+				// DDS(UID);
 
-				/**
-				 * If the UID and the masterTag are the same then the program
-				 * will allow the user to add a new card to the database for
-				 * access at another time
-				 */
 				masterTag = BCrypt.checkpw(UID, getMasterTag());
 				// if (UID.equals(masterTag)) {
 				if (masterTag == true) {
@@ -76,62 +69,20 @@ public class SmartCardReader {
 					System.out
 							.print("Please Present New Badge or Tap Again for Access\n");
 
-					try {
-
-						// if (terminal.waitForCardPresent(5000) == false) {
-						// Auth.Access(UID, masterTag);
-						// } else {
-
-						terminal.waitForCardPresent(0);
-
-						// Makes UID a string variable
-						UID = bytesToHex(Read.Reader(terminal).getData());
-						terminal.waitForCardAbsent(2000);
-						masterTag = BCrypt.checkpw(UID, getMasterTag());
-
-						/**
-						 * To add or remove a card's UID from the database then
-						 * the master tag must be presented once more for
-						 * confirmation
-						 */
-						// if (!UID.equals(masterTag)) {
-						if (masterTag == false) {
-							if (Add.Compare(UID) == true)
-								System.out
-										.println("Please Confirm Addition to Database");
-							else
-								System.out
-										.println("Please Confirm Removal From Database");
-
-							terminal.waitForCardAbsent(0);
-							String UID2 = bytesToHex(Read.Reader(terminal)
-									.getData());
-							masterTag = BCrypt.checkpw(UID2, getMasterTag());
-							// if (!UID2.equals(masterTag)) {
-							if (masterTag == false)
-								System.out.println("Wrong Card. Try Again");
-							else
-								AddCard.Add(UID, masterTag);
-						} else
-							Auth.Access(UID, masterTag);
-						// }
-					} catch (Exception ex) {
-						ex.printStackTrace();
-						// System.out.println("Bad Read. Try Again.");
-					}
+					addCard(UID);
 
 				} else
 					Auth.Access(UID, masterTag);
-				
+
 				/**
 				 * After accessing the system you can rescan your badge to
 				 * re-lock the system
 				 */
 				if (!lock) {
-					String matcher = UID;
+					String match = UID;
 					terminal.waitForCardAbsent(0);
-					UID = bytesToHex(Read.Reader(terminal).getData());
-					if (UID.equals(matcher)) {
+					UID = Read.getUID();
+					if (UID.equals(match)) {
 						LockUnlock.WindowLock(lock);
 						ActivityLog Log = new ActivityLog();
 						Log.windowLockLog(UID);
@@ -139,11 +90,10 @@ public class SmartCardReader {
 				}
 
 				terminal.waitForCardAbsent(0);
+			} catch (Throwable t) {
+				t.printStackTrace();
+				// System.out.println("Reader Not Present.");
 			}
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			// System.out.println("Reader Not Present.");
 		}
 	}
 
@@ -219,25 +169,43 @@ public class SmartCardReader {
 		return MT;
 	}
 
-	private static final char wordToHexChar(byte b) {
-		if (b < 10) {
-			return (char) ('0' + b);
-		} else {
-			return (char) ('A' + (b - 10));
-		}
-	}
+	private static void addCard(String UID) {
+		/**
+		 * To add or remove a card's UID from the database then the master tag
+		 * must be presented once more for confirmation
+		 */
+		CardTerminal terminal = TerminalSetUp();
 
-	private static final String bytesToHex(byte[] b) {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < b.length; i++) {
-			sb.append(wordToHexChar((byte) (0x0F & (b[i] >> 4))));
-			sb.append(wordToHexChar((byte) (0x0F & b[i])));
-			sb.append(' ');
-			if (0 == ((i + 1) % 10)) {
-				sb.append("\n");
-			}
+		try {
+
+			terminal.waitForCardPresent(0);
+
+			// Makes UID a string variable
+			UID = Read.getUID();
+			terminal.waitForCardAbsent(2000);
+			masterTag = BCrypt.checkpw(UID, getMasterTag());
+
+			// if (!UID.equals(masterTag)) {
+			if (masterTag == false) {
+				if (Add.Compare(UID) == true)
+					System.out.println("Please Confirm Addition to Database");
+				else
+					System.out.println("Please Confirm Removal From Database");
+
+				terminal.waitForCardAbsent(0);
+				String UID2 = Read.getUID();
+				masterTag = BCrypt.checkpw(UID2, getMasterTag());
+				// if (!UID2.equals(masterTag)) {
+				if (masterTag == false)
+					System.out.println("Wrong Card. Try Again");
+				else
+					AddCard.Add(UID, masterTag);
+			} else
+				Auth.Access(UID, masterTag);
+		} catch (Exception ex) {
+
 		}
-		return sb.toString();
+
 	}
 
 }

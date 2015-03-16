@@ -1,10 +1,9 @@
-import java.util.List;
+import java.util.Date;
 
 import javax.smartcardio.CardTerminal;
-import javax.smartcardio.TerminalFactory;
 
-import org.mdpnp.smartcardio.db.Manager;
-import org.mdpnp.smartcardio.dto.CardDTO;
+import org.mdpnp.smartcardio.activity.ActivityLogger;
+import org.mdpnp.smartcardio.db.ActivityManager;
 import org.mdpnp.smartcardio.rfid.ReadCard;
 import org.mdpnp.smartcardio.util.HibernateUtil;
 
@@ -16,15 +15,27 @@ public class Test_DB {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		Manager mg = new Manager();
+		/*EmployeeManager manager = new EmployeeManager();
 
 		CardDTO cardDto = new CardDTO();
-		cardDto.setUserName("testuser");
-		cardDto.setCardNumber("000001");
+		 cardDto.setUserName("testuser");
+		 cardDto.setCardNumber("000001");
 
-		mg.create(cardDto);
-
-		try {
+		manager.delete(cardDto);*/
+		
+		ActivityManager am = new ActivityManager();
+		ActivityLogger logger = new ActivityLogger();
+		
+		logger.setUserName("diego");
+		logger.setDate(new Date());
+		logger.setEmergencyButton(false);
+		logger.setAccess("Granted");
+		
+		am.create(logger);
+		
+		
+		
+/*		try {
 
 			// get the list of available terminals
 			TerminalFactory factory = TerminalFactory
@@ -35,8 +46,8 @@ public class Test_DB {
 			terminal = (CardTerminal) terminalList.get(0);
 
 			String UID = bytesToHex(Read.Reader(terminal).getData());
-			
-			List<CardDTO> myList = mg.findAll();
+
+			List<CardDTO> myList = mg.findByAll();
 			// System.out.println(card.getCardNumber());
 			for (CardDTO card : myList)
 				if (!myList.contains(UID)) {
@@ -48,7 +59,7 @@ public class Test_DB {
 			ex.printStackTrace();
 			// System.out.println("Reader Not Present.");
 		}
-
+*/
 		HibernateUtil.getSessionFactory().close();
 		System.out.println("\ndone");
 

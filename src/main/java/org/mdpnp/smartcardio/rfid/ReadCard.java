@@ -8,7 +8,7 @@ import javax.smartcardio.ResponseAPDU;
 
 public class ReadCard {
 
-	public ResponseAPDU Reader(CardTerminal terminal) {
+	private ResponseAPDU Reader(CardTerminal terminal) {
 		ResponseAPDU response = null;
 		CardChannel channel;
 
@@ -45,6 +45,35 @@ public class ReadCard {
 			System.out.println("Card Not Present.");
 		}
 		return response;
+	}
+	
+	public String getUID() {
+		
+		String UID = bytesToHex(Reader(null).getData());
+		
+		return UID;
+		
+	}
+	
+	private static final char wordToHexChar(byte b) {
+		if (b < 10) {
+			return (char) ('0' + b);
+		} else {
+			return (char) ('A' + (b - 10));
+		}
+	}
+
+	private static final String bytesToHex(byte[] b) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < b.length; i++) {
+			sb.append(wordToHexChar((byte) (0x0F & (b[i] >> 4))));
+			sb.append(wordToHexChar((byte) (0x0F & b[i])));
+			sb.append(' ');
+			if (0 == ((i + 1) % 10)) {
+				sb.append("\n");
+			}
+		}
+		return sb.toString();
 	}
 
 }

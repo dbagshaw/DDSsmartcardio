@@ -15,7 +15,6 @@ import javax.swing.JPanel;
 
 import org.mdpnp.smartcardio.activity.ActivityLog;
 import org.mdpnp.smartcardio.email.SendEmail;
-import org.mdpnp.smartcardio.email.SendText;
 
 public class LockUnlock {
 
@@ -28,17 +27,28 @@ public class LockUnlock {
 	static String buttonInfo2 = "By Using This Button, You Are Unlocking The System In An Emergency "
 			+ "And Your Credentials Will Be Logged Into A Database For Future Investigation. The "
 			+ "Supervisior Will Be Notified Immediately.";
-//	static boolean lock;
+	// static boolean lock;
 
 	static String access;
 
 	public static void Window() {
-
 		dialog.setLayout(new BorderLayout());
 		dialog.setTitle("MD PnP ICE Supervisor");
 		dialog.setUndecorated(true);
 		dialog.setOpacity(0.5f);
+		// dialog.setOpacity(1f);
+		// dialog.setModalityType(JDialog.ModalityType.TOOLKIT_MODAL);
 
+		// KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new
+		// KeyEventDispatcher() {
+		//
+		// @Override
+		// public boolean dispatchKeyEvent(KeyEvent arg0) {
+		// arg0.consume();
+		// return true;
+		// }
+		//
+		// });
 		JPanel panel = new JPanel();
 
 		emergency.setFont(new Font("sansserif", Font.BOLD, 40));
@@ -62,13 +72,11 @@ public class LockUnlock {
 		Window();
 
 		dialog.setVisible(true);
-		// dialog.setAlwaysOnTop(true);
+		dialog.setAlwaysOnTop(true);
 
 		emergency.setVisible(false);
 		// emergency.setVisible(true);
 
-		// frame.setVisible(true);
-		// frame.setAlwaysOnTop(true);
 		lock = true;
 
 	}
@@ -83,20 +91,13 @@ public class LockUnlock {
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		dialog.dispatchEvent(new WindowEvent(dialog, WindowEvent.WINDOW_CLOSING));
 
-		// frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		// frame.dispatchEvent(new WindowEvent(frame,
-		// WindowEvent.WINDOW_CLOSING));
-		
-//		return true;
-
 	}
 
 	public static void BreakGlass(final String cardnumber, final String username) {
 		final ActivityLog log = new ActivityLog();
-		
+
 		emergency.setVisible(true);
 		dialog.validate();
-		// frame.validate();
 		emergency.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				WindowUnlock();
@@ -107,11 +108,6 @@ public class LockUnlock {
 			}
 
 		});
-
-		/**
-		 * Add action listener to button. If pressed call @WindowUnlock method
-		 * and log activity. Send notification to my phone.
-		 */
 
 	}
 	/**
