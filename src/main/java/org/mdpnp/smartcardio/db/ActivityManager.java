@@ -1,8 +1,10 @@
 package org.mdpnp.smartcardio.db;
 
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.mdpnp.smartcardio.activity.ActivityLogger;
@@ -51,35 +53,32 @@ public class ActivityManager {
 			loggerManager.error(e.getMessage());
 		}
 
-		// } catch (HibernateException e) {
-		// if (null != tx) {
-		// tx.rollback();
-		// rowID = null;
-		// }
-		// if (null != sessionTwo) {
-		// sessionTwo.close();
-		// }
-		// loggerManager.error(e.getMessage());
-		// // System.out.println(e.getMessage());
-		//
-		// } catch (Exception e) {
-		// if (null != tx) {
-		// tx.rollback();
-		// rowID = null;
-		// }
-		// if (null != sessionTwo) {
-		// sessionTwo.close();
-		// }
-		// loggerManager.error(e.getMessage());
-		// // System.out.println(e.getMessage());
-		//
-		// } finally {
-		// if (null != sessionTwo && sessionTwo.isOpen())
-		// sessionTwo.close();
-		// }
-
 		logger.setId(rowID);
 		// sessionTwo.close();
 		return logger;
+	}
+	
+	public ActivityLogger findByName(String username) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+			session.beginTransaction();
+			Query query = session
+					.createQuery("from ActivityLogger where username = :username ");
+			query.setParameter("username", username);
+			@SuppressWarnings("unchecked")
+			List<ActivityLogger> cardList = query.list();
+			if (cardList.size() > 0)
+				return cardList.get(0);
+			else
+				return null;
+		} catch (HibernateException e) {
+			if (session.getTransaction() != null) {
+				session.getTransaction().rollback();
+				session.close();
+			}
+			e.printStackTrace();
+			loggerManager.error(e.getMessage());
+			return null;
+		}
 	}
 }

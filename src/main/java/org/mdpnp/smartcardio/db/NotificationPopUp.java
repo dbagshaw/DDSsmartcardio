@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.WindowConstants;
@@ -18,13 +17,10 @@ public class NotificationPopUp {
 	static JLabel messageLabel = new JLabel();
 	static EmployeeManager manager = new EmployeeManager();
 
-	// static GridBagConstraints constraints = new GridBagConstraints();
-
 	public static void NotificationWindow() {
 		Dimension scrSize = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setSize(300, 150);
+		frame.setSize(350, 200);
 		frame.setLayout(new GridBagLayout());
-		// GridBagConstraints constraints = new GridBagConstraints();
 		frame.setTitle(header);
 		frame.setAlwaysOnTop(true);
 		frame.setVisible(true);
@@ -39,8 +35,7 @@ public class NotificationPopUp {
 			@Override
 			public void run() {
 				try {
-					Thread.sleep(2000); // time after which pop up will be
-										// disappeared.
+					Thread.sleep(3000);
 					frame.dispose();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -49,37 +44,41 @@ public class NotificationPopUp {
 		}.start();
 
 	}
-	
-	public static void MasterNotification(String ag){
-		frame.repaint();
-		frame.validate();
-		NotificationWindow();
-		messageLabel.setText(ag + "Master Key Card.");
-	}
 
-	public static void AccessGrantedNotification(String ag, String UID) {
+	public static void AccessNotification(String notification, String UID) {
 		CardDTO cardDto = manager.findByUID(UID);
 		frame.repaint();
 		frame.validate();
 		NotificationWindow();
-		messageLabel.setText(ag + cardDto.getUserName());
+		
+		if (UID != null)
+			messageLabel.setText(notification + cardDto.getUserName());
+		else
+			messageLabel.setText(notification);
 
 	}
 
-	public static void AccessDeniedNotification(String ad, String UID) {
-		frame.repaint();
-		frame.validate();
-		NotificationWindow();
-		messageLabel.setText(ad + "Unauthorized User.");
-	}
-
-	public static void InitialAccessDeniedNotification(String iad, String UID) {
-		CardDTO cardDto = manager.findByUID(UID);
-		frame.repaint();
-		frame.validate();
-		NotificationWindow();
-		messageLabel.setText(iad + cardDto.getUserName());
-	}
+	/*
+	 * public static void MasterNotification(String ag) { frame.repaint();
+	 * frame.validate(); NotificationWindow(); messageLabel.setText(ag +
+	 * "Master Key Card."); }
+	 * 
+	 * public static void AccessGrantedNotification(String ag, String UID) {
+	 * CardDTO cardDto = manager.findByUID(UID); frame.repaint();
+	 * frame.validate(); NotificationWindow(); messageLabel.setText(ag +
+	 * cardDto.getUserName());
+	 * 
+	 * }
+	 * 
+	 * public static void AccessDeniedNotification(String ad, String UID) {
+	 * frame.repaint(); frame.validate(); NotificationWindow();
+	 * messageLabel.setText(ad + "Unauthorized User."); }
+	 * 
+	 * public static void InitialAccessDeniedNotification(String iad, String
+	 * UID) { CardDTO cardDto = manager.findByUID(UID); frame.repaint();
+	 * frame.validate(); NotificationWindow(); messageLabel.setText(iad +
+	 * cardDto.getUserName()); }
+	 */
 
 	public static void NotificationSent(String notice) {
 		frame.repaint();
@@ -88,4 +87,10 @@ public class NotificationPopUp {
 		messageLabel.setText(notice);
 	}
 
+	public static void TerminalNotification(String terminalNotice) {
+		frame.repaint();
+		frame.validate();
+		NotificationWindow();
+		messageLabel.setText(terminalNotice);
+	}
 }

@@ -1,9 +1,15 @@
 package org.mdpnp.smartcardio.email;
 
-import java.util.*;
+import java.util.Date;
+import java.util.Properties;
 
-import javax.mail.*;
-import javax.mail.internet.*;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import org.mdpnp.smartcardio.db.EmployeeManager;
 import org.mdpnp.smartcardio.db.NotificationPopUp;
@@ -18,15 +24,16 @@ public class SendEmail {
     
     //fix the null cardnumber
     public static void Email(String cardnumber, String username) {
-    	EmployeeManager manager = new EmployeeManager();
-    	manager.findByUID(cardnumber);
-    	manager.findByName(username);
+    	EmployeeManager eManager = new EmployeeManager();
+    	eManager.findByUID(cardnumber);
+    	eManager.findByName(username);
+   
         String from = USER_NAME;
         String pass = PASSWORD;
         String[] to = { RECIPIENT, RECIPIENT2 }; // list of recipient email addresses
         String subject = "Emergency Override";
-        String body = username + " has used the emergency button.";
-
+        String body = username + " used the emergency button - " + new Date();
+        
         sendFromYahoo(from, pass, to, subject, body);
     }
 

@@ -9,23 +9,23 @@ import org.mdpnp.smartcardio.activity.ActivityLog;
 import org.mdpnp.smartcardio.db.EmployeeManager;
 import org.mdpnp.smartcardio.db.NotificationPopUp;
 import org.mdpnp.smartcardio.dto.CardDTO;
-import org.mdpnp.smartcardio.lock.LockUnlock;
+import org.mdpnp.smartcardio.lock.LockScreen;
 
 public class Authenticate {
 
-	ActivityLog Log = new ActivityLog();
+	static ActivityLog Log = new ActivityLog();
 
-	String database = "key_database.csv";
-	String activity_log = "ActivityLog.csv";
-	String ag = "Welcome, ";
-	String ad = "Access Denied To: ";
-	String iad = "Initial Access Denied To: ";
+	static String database = "key_database.csv";
+	static String activity_log = "ActivityLog.csv";
+	static String ag = "Welcome, ";
+	static String ad = "Access Denied To: ";
+	static String iad = "Initial Access Denied To: ";
 
-	Boolean accessGranted;
+	static Boolean accessGranted;
 
-	EmployeeManager eManager = new EmployeeManager();
+	static EmployeeManager eManager = new EmployeeManager();
 
-	public void Access(String UID, Boolean masterTag) {
+	public static void Access(String UID, Boolean masterTag) {
 		CardDTO cardDto = eManager.findByUID(UID);
 
 		if (masterTag == true)
@@ -44,14 +44,14 @@ public class Authenticate {
 
 	}
 
-	public boolean MasterKeyCardAccess(String UID) {
-		LockUnlock.WindowUnlock();
-		NotificationPopUp.MasterNotification(ag);
+	public static boolean MasterKeyCardAccess(String UID) {
+		LockScreen.WindowUnlock();
+		// NotificationPopUp.MasterNotification(ag);
+		NotificationPopUp.AccessNotification(ag, UID);
 		System.out.print(ag + "Master Key Card. ");
-		
-//		Log.accessGrantedLog();
-		
-		
+
+		// Log.accessGrantedLog();
+
 		try (PrintWriter actlog = new PrintWriter(new BufferedWriter(
 				new FileWriter(activity_log, true)))) {
 			actlog.print("Access Granted:,");
@@ -59,19 +59,22 @@ public class Authenticate {
 			e.printStackTrace();
 		}
 		Log.dateTime(UID, null, null);
-		
+
 		accessGranted = true;
 		return accessGranted;
 	}
-	public boolean AccessGranted(String UID) {
+
+	public static boolean AccessGranted(String UID) {
 		CardDTO cardDto = eManager.findByUID(UID);
-		LockUnlock.WindowUnlock();
+		LockScreen.WindowUnlock();
 		String username = cardDto.getUserName();
-		NotificationPopUp.AccessGrantedNotification(ag, cardDto.getCardNumber());
+		// NotificationPopUp.AccessGrantedNotification(ag,
+		// cardDto.getCardNumber());
+		NotificationPopUp.AccessNotification(ag, cardDto.getCardNumber());
 		System.out.print(ag + username + ". ");
 
 		Log.accessGrantedLog(UID);
-		
+
 		try (PrintWriter actlog = new PrintWriter(new BufferedWriter(
 				new FileWriter(activity_log, true)))) {
 			actlog.print("Access Granted:,");
@@ -84,16 +87,17 @@ public class Authenticate {
 		return accessGranted;
 	}
 
-	public boolean InitialAccessDenied(String UID) {
+	public static boolean InitialAccessDenied(String UID) {
 		CardDTO cardDto = eManager.findByUID(UID);
 		String username = cardDto.getUserName();
-		
-		LockUnlock.BreakGlass(cardDto.getCardNumber(), username);
-		
-		NotificationPopUp.InitialAccessDeniedNotification(iad,
-				cardDto.getCardNumber());
+
+		LockScreen.BreakGlass(cardDto.getCardNumber(), username);
+
+		// NotificationPopUp.InitialAccessDeniedNotification(iad,
+		// cardDto.getCardNumber());
+		NotificationPopUp.AccessNotification(iad, cardDto.getCardNumber());
 		System.out.print(iad + username + ". ");
-		
+
 		Log.accessDeniedLog(UID);
 
 		try (PrintWriter actlog = new PrintWriter(new BufferedWriter(
@@ -109,10 +113,11 @@ public class Authenticate {
 
 	}
 
-	public boolean AccessDenied(String UID) {
-		NotificationPopUp.AccessDeniedNotification(ad, UID);
+	public static boolean AccessDenied(String UID) {
+		// NotificationPopUp.AccessDeniedNotification(ad, UID);
+		NotificationPopUp.AccessNotification(ad, UID);
 		System.out.print(ad);
-		
+
 		Log.unknownDeniedLog(UID);
 
 		try (PrintWriter actlog = new PrintWriter(new BufferedWriter(

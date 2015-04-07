@@ -1,11 +1,15 @@
 package org.mdpnp.smartcardio.rfid;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Scanner;
+
+import javax.smartcardio.CardTerminal;
 
 import org.mdpnp.smartcardio.activity.ActivityLog;
 import org.mdpnp.smartcardio.db.EmployeeManager;
@@ -17,9 +21,26 @@ public class AddCard {
 	static RemoveCard Remove = new RemoveCard();
 	static ActivityLog Log = new ActivityLog();
 	static EmployeeManager eManager = new EmployeeManager();
+	
+	static boolean masterTag;
 
+	static String key = "key.txt";
 	static String database = "key_database.csv";
 	static String activity_log = "ActivityLog.csv";
+
+	public static String getMasterTag() {
+		String MT = null;
+		String line = null;
+		try (BufferedReader in = new BufferedReader(new FileReader(key))) {
+			while ((line = in.readLine()) != null) {
+				MT = line;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return MT;
+	}
 
 	/**
 	 * Compare method enables the program to tell the user whether or not the
@@ -29,7 +50,7 @@ public class AddCard {
 	 * @param UID
 	 * @return
 	 */
-	public boolean Compare(String UID) {
+	public static boolean Compare(String UID) {
 
 		// Set<String> s = new HashSet<String>();
 		// String line;
@@ -52,6 +73,50 @@ public class AddCard {
 	 * 
 	 * @param UID
 	 */
+	public static void addCard(CardTerminal terminal) {
+
+		try {
+
+			// if (terminal.waitForCardPresent(5000) == false) {
+			// Auth.Access(UID, masterTag);
+			// } else {
+
+			terminal.waitForCardPresent(0);
+
+			// Makes UID a string variable
+			String UID = ReadCard.getUID();
+			terminal.waitForCardAbsent(2000);
+			masterTag = BCrypt.checkpw(UID, getMasterTag());
+
+			/**
+			 * To add or remove a card's UID from the database then the master
+			 * tag must be presented once more for confirmation
+			 */
+			// if (!UID.equals(masterTag)) {
+			if (masterTag == false) {
+				if (Compare(UID) == true)
+					System.out.println("Please Confirm Addition to Database");
+				else
+					System.out.println("Please Confirm Removal From Database");
+
+				terminal.waitForCardAbsent(0);
+				String UID2 = ReadCard.getUID();
+
+				masterTag = BCrypt.checkpw(UID2, getMasterTag());
+				// if (!UID2.equals(masterTag)) {
+				if (masterTag == false)
+					System.out.println("Wrong Card. Try Again");
+				else
+					AddCard.Add(UID, masterTag);
+			} else
+				Authenticate.Access(UID, masterTag);
+			// }
+		} catch (Throwable t) {
+			// t.printStackTrace();
+			System.out.println("Bad Read. Try Again.");
+		}
+	}
+
 	public static void Add(String UID, Boolean masterTag) {
 		boolean accessGranted = fileReader(UID);
 		fileReader(UID);
