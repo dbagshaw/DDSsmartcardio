@@ -43,7 +43,7 @@ public class ReadCard {
 			}
 		}
 
-		String connectedNotice = "Connected to Terminal: " + terminal;
+		String connectedNotice = "<html>Connected to Terminal:<br/>" + terminal + "</html>";
 		// System.out.println(connectedNotice);
 		NotificationPopUp.TerminalNotification(connectedNotice);
 
@@ -52,22 +52,6 @@ public class ReadCard {
 		return terminal;
 
 	}
-
-	// private static void reconnect() {
-	//
-	// new Thread() {
-	// @Override
-	// public void run() {
-	// try {
-	// Thread.sleep(0);
-	// TerminalSetUp();
-	// } catch (Exception ex) {
-	// // ex.printStackTrace();
-	// }
-	// };
-	// }.start();
-	//
-	// }
 
 	private static ResponseAPDU Reader() {
 		ResponseAPDU response = null;
@@ -94,6 +78,7 @@ public class ReadCard {
 			byte[] commandUID = { (byte) 0xFF, (byte) 0xCA, 0x00, 0x00, 0x00 };
 
 			CommandAPDU command = new CommandAPDU(commandUID);
+			
 			response = channel.transmit(command);
 
 			// disconnect
@@ -101,10 +86,14 @@ public class ReadCard {
 
 		} catch (Throwable t) {
 			// t.printStackTrace();
-			String lostConnNotice = "Lost Connection to Terminal:/n" + terminal;
+			String lostConnNotice = "<html>Lost Connection to Terminal:<br/>" + terminal + "</html>";
 			// System.out.println(lostConnNotice);
 			NotificationPopUp.TerminalNotification(lostConnNotice);
 			// TerminalSetUp();
+			
+			/*
+			 * create a program restart method and call it here
+			 */
 
 		}
 

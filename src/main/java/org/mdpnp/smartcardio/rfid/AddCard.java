@@ -127,23 +127,23 @@ public class AddCard {
 
 			System.out.println("Is This Person Allowed Clinical Access?");
 			// Scanner input2 = new Scanner(System.in);
-			String access = input.next().toLowerCase();
+			String permission = input.next().toLowerCase();
 
-			if (access.startsWith("y"))
-				access = "y";
-			else if (access.startsWith("n"))
-				access = "n";
+			if (permission.startsWith("y"))
+				permission = "y";
+			else if (permission.startsWith("n"))
+				permission = "n";
 
-			System.out.println(access);
+			System.out.println(permission);
 
 			System.out.println("");
-			fileWriter(access, name, UID, masterTag); // access may not be
+			fileWriter(permission, name, UID, masterTag); // access may not be
 														// necessary here
 
 			// cardDto.setCardNumber(BCrypt.hashpw(UID, BCrypt.gensalt()));
 			input.close();
 
-			addToDataBase(access, name, UID);
+			addToDataBase(permission, name, UID);
 
 		} else {
 			// if hashset does contain UID, remove it from the database
@@ -151,12 +151,12 @@ public class AddCard {
 		}
 	}
 
-	public static void addToDataBase(String access, String name, String UID) {
+	public static void addToDataBase(String permission, String name, String UID) {
 		CardDTO cardDto = new CardDTO();
 
 		cardDto.setUserName(name);
 		cardDto.setCardNumber(UID);
-		cardDto.setClinicalAccess(access);
+		cardDto.setPermissions(permission);
 
 		eManager.create(cardDto);
 	}
@@ -174,7 +174,7 @@ public class AddCard {
 		return accessGranted;
 	}
 
-	public static void fileWriter(String access, String name, String UID,
+	public static void fileWriter(String permission, String name, String UID,
 			Boolean masterTag) {
 		try (PrintWriter out = new PrintWriter(new BufferedWriter(
 				new FileWriter(database, true)))) {

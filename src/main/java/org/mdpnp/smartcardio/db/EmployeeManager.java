@@ -167,6 +167,29 @@ public class EmployeeManager {
 			return null;
 		}
 	}
+	
+	public List<CardDTO> findSupervisor() {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+			session.beginTransaction();
+			Query query = session
+					.createQuery("from CardDTO where supervisor = 'y' ");
+			@SuppressWarnings("unchecked")
+			List<CardDTO> cardList = query.list();
+			if (cardList.size() > 0)
+				return cardList;
+			else
+				return null;
+		} catch (HibernateException e) {
+			if (session.getTransaction() != null) {
+				session.getTransaction().rollback();
+				session.close();
+			}
+			e.printStackTrace();
+			loggerManager.error(e.getMessage());
+			return null;
+		}
+	}
 
 	public CardDTO findByUID(String cardnumber) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
@@ -191,14 +214,38 @@ public class EmployeeManager {
 			return null;
 		}
 	}
-
-	public CardDTO findByAccess(String clinicalaccess) {
+	
+	public CardDTO findByCarrier(String carrier) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
 			session.beginTransaction();
 			Query query = session
-					.createQuery("from CardDTO where clinicalaccess = :clinicalaccess ");
-			query.setParameter("clinicalaccess", clinicalaccess);
+					.createQuery("from CardDTO where carrier = :carrier ");
+			query.setParameter("carrier", carrier);
+			@SuppressWarnings("unchecked")
+			List<CardDTO> cardList = query.list();
+			if (cardList.size() > 0)
+				return cardList.get(0);
+			else
+				return null;
+		} catch (HibernateException e) {
+			if (session.getTransaction() != null) {
+				session.getTransaction().rollback();
+				session.close();
+			}
+			e.printStackTrace();
+			loggerManager.error(e.getMessage());
+			return null;
+		}
+	}
+
+	public CardDTO findByAccess(String permissions) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		try {
+			session.beginTransaction();
+			Query query = session
+					.createQuery("from CardDTO where permissions = :permissions ");
+			query.setParameter("permissions", permissions);
 			@SuppressWarnings("unchecked")
 			List<CardDTO> cardList = query.list();
 			if (cardList.size() > 0)

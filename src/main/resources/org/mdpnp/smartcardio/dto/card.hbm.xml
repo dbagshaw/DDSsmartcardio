@@ -12,8 +12,12 @@
 		</id>
 
 		<property name="userName" column="username" />
+		<property name="supervisor" column="supervisor" />
 		<property name="creationDate" column="creationdate" />
 		<property name="modificationDate" column="modificationdate" />
-		<property name="clinicalAccess" column="clinicalaccess" />
+		<property name="permissions" column="permissions" />
+		<property name="phoneNumber" column="phonenumber" />
+		<property name="carrier" column="carrier" />
+		
 	</class>
 </hibernate-mapping>

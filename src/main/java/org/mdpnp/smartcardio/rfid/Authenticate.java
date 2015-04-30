@@ -36,9 +36,9 @@ public class Authenticate {
 
 			if (myList == null)
 				AccessDenied(UID);
-			else if (cardDto.getClinicalAccess().equals("y"))
+			else if (cardDto.getPermissions().equals("y"))
 				AccessGranted(UID);
-			else if (cardDto.getClinicalAccess().equals("n"))
+			else if (cardDto.getPermissions().equals("n"))
 				InitialAccessDenied(UID);
 		}
 

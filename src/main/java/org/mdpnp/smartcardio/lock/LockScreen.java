@@ -113,8 +113,21 @@ public class LockScreen {
 
 	public static void BreakGlass(final String cardnumber, final String username) {
 		final ActivityLog log = new ActivityLog();
-		emergency.setVisible(true);
-		dialog.validate();
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(5000);
+					
+					emergency.setVisible(true);
+					dialog.validate();
+					
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			};
+		}.start();
+		
 		emergency.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				WindowUnlock();

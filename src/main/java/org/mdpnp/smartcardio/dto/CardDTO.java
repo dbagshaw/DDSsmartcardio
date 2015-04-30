@@ -14,7 +14,10 @@ public class CardDTO {
 
 	private String cardNumber; // uniqueID
 	private String userName;
-	private String clinicalAccess;
+	private String permissions;
+	private String supervisor;
+	private String phoneNumber;
+	private String carrier;
 	private Date creationDate;
 	private Date modificationDate;
 
@@ -26,12 +29,12 @@ public class CardDTO {
 		this.cardNumber = cardNumber;
 	}
 	
-	public String getClinicalAccess() {
-		return clinicalAccess;
+	public String getPermissions() {
+		return permissions;
 	}
 
-	public void setClinicalAccess(String clinicalAccess) {
-		this.clinicalAccess = clinicalAccess;
+	public void setPermissions(String permissions) {
+		this.permissions = permissions;
 	}
 
 	public String getCardNumber() {
@@ -64,6 +67,30 @@ public class CardDTO {
 
 	public void setModificationDate(Date modificationDate) {
 		this.modificationDate = modificationDate;
+	}
+
+	public String getSupervisor() {
+		return supervisor;
+	}
+
+	public void setSupervisor(String supervisor) {
+		this.supervisor = supervisor;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public String getCarrier() {
+		return carrier;
+	}
+
+	public void setCarrier(String carrier) {
+		this.carrier = carrier;
 	}
 
 }
