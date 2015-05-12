@@ -19,8 +19,8 @@ import org.mdpnp.smartcardio.dto.CardDTO;
 
 public class SendEmail {
 
-	private static String USER_NAME = "dmbaggy18@yahoo.com";
-	private static String PASSWORD = "Adidas 18";
+	private static String USER_NAME = "enter your email here";
+	private static String PASSWORD = "enter your password here";
 	private static String textSprint = "messaging.sprintpcs.com";
 	private static String textTMobile = "@tmomail.net";
 	private static String textVerizon = "@vtext.com";
