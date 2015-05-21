@@ -11,13 +11,13 @@
 package smartcardio;
         
 
-import java.io.Serializable;
-
-import com.rti.dds.cdr.CdrHelper;
+import com.rti.dds.infrastructure.*;
 import com.rti.dds.infrastructure.Copyable;
 
+import java.io.Serializable;
+import com.rti.dds.cdr.CdrHelper;
 
-@SuppressWarnings("serial")
+
 public class CardRead implements Copyable, Serializable
 {
 

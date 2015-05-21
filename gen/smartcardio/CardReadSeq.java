@@ -14,15 +14,15 @@ package smartcardio;
 import java.util.Collection;
 
 import com.rti.dds.infrastructure.Copyable;
-import com.rti.dds.util.LoanableSequence;
+import com.rti.dds.util.Enum;
 import com.rti.dds.util.Sequence;
+import com.rti.dds.util.LoanableSequence;
 
 
 
 /**
  * A sequence of CardRead instances.
  */
-@SuppressWarnings("serial")
 public final class CardReadSeq extends LoanableSequence implements Copyable {
     // -----------------------------------------------------------------------
     // Package Fields
@@ -51,8 +51,7 @@ public final class CardReadSeq extends LoanableSequence implements Copyable {
     }
 
 
-    @SuppressWarnings("rawtypes")
-	public CardReadSeq(Collection elements) {
+    public CardReadSeq(Collection elements) {
         super(CardRead.class, elements);
     }
     

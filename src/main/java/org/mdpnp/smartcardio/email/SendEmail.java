@@ -26,9 +26,6 @@ public class SendEmail {
 	private static String textVerizon = "@vtext.com";
 	private static String textAtt = "@txt.att.net";
 
-	// private static String RECIPIENT = "bagshawd@wit.edu";
-	// private static String RECIPIENT2 = "9782709328@vtext.com";
-
 	public static void Email(String cardnumber, String username) {
 		EmployeeManager eManager = new EmployeeManager();
 		List<CardDTO> supervisorList = new ArrayList<CardDTO>();
@@ -37,14 +34,14 @@ public class SendEmail {
 		eManager.findByName(username);
 		supervisorList = eManager.findSupervisor();
 		String[] to = new String[supervisorList.size()];
-		
+
 		// to[0] = RECIPIENT;
 		if (null != supervisorList) {
 			// for(CardDTO supervisor : supervisorsList){
 			String phone = null;
 			for (int i = 0; i < supervisorList.size(); i++) {
 				CardDTO cardDto = supervisorList.get(i);
-				
+
 				if (cardDto.getCarrier().equals("verizon"))
 					phone = cardDto.getPhoneNumber() + textVerizon;
 				else if (cardDto.getCarrier().equals("att"))
@@ -105,24 +102,11 @@ public class SendEmail {
 			transport.close();
 			String notice = "Notification Sent to Supervisor";
 			// System.out.println(notice);
-			NotificationPopUp.NotificationSent(notice);
+			NotificationPopUp.getInstance().notificationSent(notice);
 		} catch (AddressException ae) {
 			ae.printStackTrace();
 		} catch (MessagingException me) {
 			me.printStackTrace();
 		}
 	}
-	/*
-	 * private static String sendToVerizon() { String verizon = "@vtext.com";
-	 * return verizon; }
-	 * 
-	 * private static String sendToATT() { String att = "@txt.att.net"; return
-	 * att; }
-	 * 
-	 * private static String sendToSprint() { String sprint =
-	 * "messaging.sprintpcs.com"; return sprint; }
-	 * 
-	 * private static String sendToTMobile() { String tMobile = "@tmomail.net";
-	 * return tMobile; }
-	 */
 }

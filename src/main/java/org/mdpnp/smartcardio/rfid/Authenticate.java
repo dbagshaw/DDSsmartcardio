@@ -47,7 +47,7 @@ public class Authenticate {
 	public static boolean MasterKeyCardAccess(String UID) {
 		LockScreen.WindowUnlock();
 		// NotificationPopUp.MasterNotification(ag);
-		NotificationPopUp.AccessNotification(ag, UID);
+		NotificationPopUp.getInstance().accessNotification(ag, UID);
 		System.out.print(ag + "Master Key Card. ");
 
 		// Log.accessGrantedLog();
@@ -70,7 +70,7 @@ public class Authenticate {
 		String username = cardDto.getUserName();
 		// NotificationPopUp.AccessGrantedNotification(ag,
 		// cardDto.getCardNumber());
-		NotificationPopUp.AccessNotification(ag, cardDto.getCardNumber());
+		NotificationPopUp.getInstance().accessNotification(ag, cardDto.getCardNumber());
 		System.out.print(ag + username + ". ");
 
 		Log.accessGrantedLog(UID);
@@ -95,7 +95,7 @@ public class Authenticate {
 
 		// NotificationPopUp.InitialAccessDeniedNotification(iad,
 		// cardDto.getCardNumber());
-		NotificationPopUp.AccessNotification(iad, cardDto.getCardNumber());
+		NotificationPopUp.getInstance().accessNotification(iad, cardDto.getCardNumber());
 		System.out.print(iad + username + ". ");
 
 		Log.accessDeniedLog(UID);
@@ -115,7 +115,7 @@ public class Authenticate {
 
 	public static boolean AccessDenied(String UID) {
 		// NotificationPopUp.AccessDeniedNotification(ad, UID);
-		NotificationPopUp.AccessNotification(ad, UID);
+		NotificationPopUp.getInstance().accessNotification(ad, UID);
 		System.out.print(ad);
 
 		Log.unknownDeniedLog(UID);
