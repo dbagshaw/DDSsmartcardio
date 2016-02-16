@@ -10,71 +10,24 @@ import javax.smartcardio.CommandAPDU;
 import javax.smartcardio.ResponseAPDU;
 import javax.smartcardio.TerminalFactory;
 
-import org.mdpnp.smartcardio.db.NotificationPopUp;
-import org.mdpnp.smartcardio.rfid.ReadCard;
-
 public class Test_DB {
-
-	static CardTerminal terminal = null;
-	static boolean run = true;
 
 	public static void main(String[] args) {
 
-		TerminalSetUp();
-
-		while (run) {
-
-			// Makes UID a string variable
-			String UID = null;
-			if (terminal != null) {
-				UID = ReadCard.getUID();
-			}
-		}
-
-	}
-
-	public static CardTerminal TerminalSetUp() {
-
-		Thread terminalThread = new Thread(() -> {
-			String searchNotice = "Searching for Terminals...";
-			NotificationPopUp.getInstance().terminalNotification(searchNotice);
-
-			for (int i = 0; i <= 100; i++) {
-				while (terminal == null) {
-					try {
-
-						// get the list of available terminals
-				TerminalFactory factory = TerminalFactory.getInstance("PC/SC",
-						null);
-				List<CardTerminal> terminalList = factory.terminals().list();
-
-				terminal = (CardTerminal) terminalList.get(i);
-
-				System.out.println(terminalList);
-			} catch (Exception ex) {
-				// ex.printStackTrace();
-				clearPCSC();
-			}
-		}
-	}
-	if (terminal != null) {
-		String connectedNotice = "<html>Connected to Terminal:<br/>" + terminal
-				+ "</html>";
-		NotificationPopUp.getInstance().terminalNotification(connectedNotice);
-		Reader(terminal);
-	}
-
-}		);
-		terminalThread.start();
-
-		return terminal;
-	}
-
-	private static final ResponseAPDU Reader(CardTerminal terminal) {
+		CardTerminal terminal;
 		ResponseAPDU response = null;
 		CardChannel channel;
 
 		try {
+			// get the list of available terminals
+			TerminalFactory factory = TerminalFactory
+					.getInstance("PC/SC", null);
+			List<CardTerminal> terminalList = factory.terminals().list();
+
+			// System.out.println(terminalList);
+
+			// take the first terminal in the list
+			terminal = (CardTerminal) terminalList.get(0);
 
 			terminal.waitForCardPresent(0);
 
@@ -99,41 +52,13 @@ public class Test_DB {
 
 			// disconnect
 			card.disconnect(false);
+			
+			String UID = bytesToHex(response.getData());
+			System.out.println(UID);
 
 		} catch (Throwable t) {
-			String lostConnNotice = "<html>Lost Connection to Terminal:<br/>"
-					+ terminal + "</html>";
-			NotificationPopUp.getInstance().terminalNotification(lostConnNotice);
-
-			// clearPCSC();
-			terminal = null;
-			if (terminal == null)
-				TerminalSetUp();
+			// t.printStackTrace();
 		}
-
-		return response;
-	}
-
-	private static void clearPCSC() {
-		try {
-			// get the list of available terminals
-			TerminalFactory factory = TerminalFactory
-					.getInstance("PC/SC", null);
-			List<CardTerminal> terminalList = factory.terminals().list();
-
-			terminal = (CardTerminal) terminalList.get(0);
-			System.out.println(terminalList);
-			// terminalList.clear();
-
-		} catch (Exception ex) {
-			// ex.printStackTrace();
-		}
-
-	}
-
-	public static final String getUID() {
-		String UID = bytesToHex(Reader(terminal).getData());
-		return UID;
 	}
 
 	private static final char wordToHexChar(byte b) {
