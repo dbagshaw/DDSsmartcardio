@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS `cardreader`.`activity_log`;
+
 CREATE TABLE `cardreader`.`activity_log` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(45) NOT NULL,

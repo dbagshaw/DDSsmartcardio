@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS `cardreader`.`employees`;
+
 CREATE TABLE `cardreader`.`employees` (
   `username` varchar(45) NOT NULL COMMENT 'name of the card owner',
   `cardnumber` varchar(70) NOT NULL COMMENT 'unique identifier of the card',
