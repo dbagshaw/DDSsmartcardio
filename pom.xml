@@ -61,11 +61,16 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.6</version>
 		</dependency>
+
+		<!-- Java mail http://mvnrepository.com/artifact/javax.mail/javax.mail-api/1.5.5 -->
+		<!-- Check bill shannon's comment about artifactID http://stackoverflow.com/a/16808343/3961519 -->
 		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>1.5.0-b01</version>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>1.5.5</version>
 		</dependency>
+		
+		
 	</dependencies>
 	<repositories>
 		<repository>
