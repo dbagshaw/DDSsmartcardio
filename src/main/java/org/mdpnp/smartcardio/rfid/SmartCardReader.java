@@ -38,7 +38,7 @@ public class SmartCardReader {
 
 		try {
 
-			LockScreen.WindowLock(lock);
+			LockScreen.WindowLock();
 			CardTerminal terminal = ReadCard.TerminalSetUp();
 
 			while (run) {
