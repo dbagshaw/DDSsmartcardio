@@ -76,6 +76,11 @@ public class EmailSender {
 
 
 
+	public String getUser_name() {
+			return user_name;
+		}
+
+
 	/**
 	   * Sends an email using the server configuration of this class
 	   * @param to
