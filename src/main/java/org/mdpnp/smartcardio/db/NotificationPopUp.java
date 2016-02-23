@@ -16,7 +16,7 @@ public class NotificationPopUp {
 	String header = "Notification";
 	JFrame frame = new JFrame();
 	JLabel messageLabel = new JLabel();
-	EmployeeManager manager = new EmployeeManager();
+	EmployeeManager eManager = new EmployeeManager();
 
 	public NotificationPopUp() {
 		Dimension scrSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -31,8 +31,6 @@ public class NotificationPopUp {
 		frame.add(messageLabel);
 
 		frame.setLocation(scrSize.width - frame.getWidth(), 0);
-
-
 	}
 
 	public void displayFor() {
@@ -52,10 +50,7 @@ public class NotificationPopUp {
 	}
 
 	public void accessNotification(String notification, String UID) {
-		CardDTO cardDto = manager.findByUID(UID);
-		frame.repaint();
-		frame.validate();
-		
+		CardDTO cardDto = eManager.findByUID(UID);
 		
 		if (UID != null)
 			messageLabel.setText(notification + cardDto.getUserName());
@@ -66,17 +61,11 @@ public class NotificationPopUp {
 	}
 
 	public void notificationSent(String notice) {
-		frame.repaint();
-		frame.validate();
-		
 		messageLabel.setText(notice);
 		displayFor();
 	}
 
 	public void terminalNotification(String terminalNotice) {
-		frame.repaint();
-		frame.validate();
-		
 		messageLabel.setText(terminalNotice);
 		displayFor();
 	}

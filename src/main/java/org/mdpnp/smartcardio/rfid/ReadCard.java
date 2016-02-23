@@ -1,10 +1,6 @@
 package org.mdpnp.smartcardio.rfid;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-
 
 import javax.smartcardio.ATR;
 import javax.smartcardio.Card;
@@ -15,60 +11,56 @@ import javax.smartcardio.CommandAPDU;
 import javax.smartcardio.ResponseAPDU;
 import javax.smartcardio.TerminalFactory;
 
-
 import org.mdpnp.smartcardio.activity.ActivityLog;
 import org.mdpnp.smartcardio.db.EmployeeManager;
-import org.mdpnp.smartcardio.db.JavaFXNotificationPopUp;
 import org.mdpnp.smartcardio.db.NotificationPopUp;
 import org.mdpnp.smartcardio.dto.CardDTO;
 import org.mdpnp.smartcardio.lock.LockScreen;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class ReadCard {
 
-	static CardTerminal terminal = null;
-
+	static CardTerminal terminal;
+	
 	public static CardTerminal TerminalSetUp() {
+		// CardTerminal terminal = null;
+		String searchNotice = "Searching for Terminals...";
+		NotificationPopUp.getInstance().terminalNotification(searchNotice);
 
-		Thread terminalThread = new Thread(
-				() -> {
-					// CardTerminal terminal = null;
-					String searchNotice = "Searching for Terminals...";
-					NotificationPopUp.getInstance().terminalNotification(searchNotice);
-					
-					for (int i = 0; i <= 100; i++) {
-						while (terminal == null) {
-							try {
+		while (terminal == null) {
 
-								// get the list of available terminals
-								TerminalFactory factory = TerminalFactory
-										.getInstance("PC/SC", null);
-								List<CardTerminal> terminalList = factory
-										.terminals().list();
-								terminal = (CardTerminal) terminalList.get(i);
+			try {
+				// get the list of available terminals
+				TerminalFactory factory = TerminalFactory.getInstance("PC/SC",
+						null);
+				List<CardTerminal> terminalList = factory.terminals().list();
 
-								// System.out.println(terminalList);
+				// System.out.println(terminalList);
 
-							} catch (Exception ex) {
-								// ex.printStackTrace();
-							}
-						}
-					}
-					if (terminal != null) {
-						String connectedNotice = "<html>Connected to Terminal:<br/>"
-								+ terminal + "</html>";
-						NotificationPopUp.getInstance().terminalNotification(connectedNotice);
-						Reader(terminal);
-					}
+				// take the first terminal in the list
+				terminal = (CardTerminal) terminalList.get(0);
 
-				});
-		terminalThread.start();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				// System.out.println("No Terminals Found");
+			}
+		}
+
+		String connectedNotice = "<html>Connected to Terminal:<br/>" + terminal
+				+ "</html>";
+		// System.out.println(connectedNotice);
+		NotificationPopUp.getInstance().terminalNotification(connectedNotice);
+
+		// Reader();
 
 		return terminal;
+
 	}
 
-	private static ResponseAPDU Reader(CardTerminal terminal) {
+	private static ResponseAPDU Reader() {
 		ResponseAPDU response = null;
 		CardChannel channel;
+		CardTerminal terminal = TerminalSetUp();
 
 		try {
 
@@ -101,108 +93,86 @@ public class ReadCard {
 			String lostConnNotice = "<html>Lost Connection to Terminal:<br/>"
 					+ terminal + "</html>";
 			// System.out.println(lostConnNotice);
-			NotificationPopUp.getInstance().terminalNotification(lostConnNotice);
+			NotificationPopUp.getInstance()
+					.terminalNotification(lostConnNotice);
+			// TerminalSetUp();
+
 			/*
 			 * create a program restart method and call it here
 			 */
-			if (terminal == null)
-				TerminalSetUp();
 		}
-
 		return response;
 	}
 
-	@SuppressWarnings("unused")
-	private static void restartApplication() {
-		final String javaBin = System.getProperty("java.home") + File.separator
-				+ "bin" + File.separator + "java";
-		// File currentJar = null;
-		// File currentJar =
-		// "C:/Users/bagshawd/Documents/mdpnp/DDSsmartcardio/target/DDSsmartcardio-1.0-SNAPSHOT-shaded.jar";
-
-		File currentJar = new File(
-				"C:/Users/bagshawd/Documents/mdpnp/DDSsmartcardio/target/DDSsmartcardio-1.0-SNAPSHOT.jar");
-
-		// try {
-		// currentJar = new File(SmartCardReader.class.getProtectionDomain()
-		// .getCodeSource().getLocation().toURI());
-		// } catch (URISyntaxException e1) {
-		// e1.printStackTrace();
-		// }
-
-		// System.out.println(currentJar);
-
-		/* is it a jar file? */
-		if (!currentJar.getName().endsWith(".jar"))
-			return;
-
-		/* Build command: java -jar application.jar */
-		final ArrayList<String> command = new ArrayList<String>();
-		command.add("java -cp C:/Users/bagshawd/Documents/mdpnp/DDSsmartcardio/target/DDSsmartcardio-1.0-SNAPSHOT.jar org.mdpnp.smartcardio.rfid.SmartCardReader");
-		// command.add("java");
-		// command.add("-cp");
-		// command.add(currentJar.getPath() +
-		// "org.mdpnp.smartcardio.rfid.SmartCardReader");
-
-		// System.out.println(command);
-
-		final ProcessBuilder builder = new ProcessBuilder(command);
-		try {
-			builder.start();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		Thread thread = new Thread(() -> {
-			try {
-				Thread.sleep(3000);
-				System.exit(0);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
-
-		thread.start();
-
-	}
-
-	public static void Master(CardTerminal terminal, String UID) {
-		try {
-			terminal.waitForCardAbsent(0);
+	public static void Master(String UID) {
+//		try {
+//			terminal.waitForCardAbsent(0);
 			/**
 			 * If the user wants to use the master tag to access the device then
 			 * tap again to be granted access
 			 */
-			NotificationPopUp.getInstance()
-					.terminalNotification("Present New Badge or Tap Again for Access");
+			NotificationPopUp.getInstance().terminalNotification(
+					"Present New Badge or Tap Again for Access");
 			// System.out.println("Present New Badge or Tap Again for Access");
 
 			AddCard.addCard(terminal);
-		} catch (CardException e) {
-			e.printStackTrace();
-		}
-
+//		} catch (CardException e) {
+//			e.printStackTrace();
+//		}
 	}
 
-	public static void reLock(boolean lock, boolean masterTag/*
-															 * , CardTerminal
-															 * terminal
-															 */) {
+	public static void reLock(boolean masterTag, CardTerminal terminal) {
 		EmployeeManager eManager = new EmployeeManager();
 		String UID = getUID();
 
 		CardDTO myList = eManager.findByUID(UID);
 
-		if (masterTag == true || myList != null)
-			LockScreen.WindowLock(lock);
+		try {
+
+			terminal.waitForCardAbsent(0);
+
+			if (masterTag == true || myList != null)
+				LockScreen.WindowLock();
+			else
+				return;
+
+		} catch (CardException e) {
+			e.printStackTrace();
+		}
 
 		ActivityLog Log = new ActivityLog();
 		Log.windowLockLog(UID);
+	}
 
+	public static void Lock(boolean masterTag, CardTerminal terminal) {
+		try {
+
+			// if (terminal.waitForCardPresent(5000) == false) {
+			// Auth.Access(UID, masterTag);
+			// } else {
+
+			terminal.waitForCardPresent(0);
+
+			// Makes UID a string variable
+			String UID = ReadCard.getUID();
+			terminal.waitForCardAbsent(2000);
+			// masterTag = BCrypt.checkpw(UID, getMasterTag());
+
+			EmployeeManager eManager = new EmployeeManager();
+			CardDTO myList = eManager.findByUID(UID);
+
+			if (masterTag == true || myList != null)
+				LockScreen.WindowLock();
+
+		} catch (Throwable t) {
+			// t.printStackTrace();
+			System.out.println("Bad Read. Try Again.");
+		}
 	}
 
 	public static String getUID() {
-		String UID = bytesToHex(Reader(terminal).getData());
+		String UID = bytesToHex(Reader().getData());
+
 		return UID;
 	}
 

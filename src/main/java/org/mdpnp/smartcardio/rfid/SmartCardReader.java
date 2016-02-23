@@ -24,65 +24,74 @@ import com.rti.dds.topic.Topic;
 public class SmartCardReader {
 
 	static boolean masterTag;
-	// CardChannel channel;
-	// static CardTerminal terminal = null;
 
-	// static AddCard Add = new AddCard();
-	// static ReadCard Read = new ReadCard();
-	// static Authenticate Auth = new Authenticate();
-	// static AESEncryption AES = new AESEncryption();
-	static boolean run = true;
-	static boolean lock = false;
+	// static boolean run = true;
+	// static boolean lock = false;
 
 	public static void main(String[] args) {
 
 		try {
 
-			LockScreen.WindowLock();
-			CardTerminal terminal = ReadCard.TerminalSetUp();
+			CardTerminal terminal = null;
 
-			while (run) {
+			LockScreen.WindowLock();
+			System.out.println(LockScreen.isLocked());
+			terminal = ReadCard.TerminalSetUp();
+
+			while (true) {
 
 				// Makes UID a string variable
-				String UID = null;
-				if (terminal != null) {
-					UID = ReadCard.getUID();
-					// else
-					// ReadCard.TerminalSetUp();
+				String UID = ReadCard.getUID();
 
-					// System.out.println(UID);
-					// System.out.println(BCrypt.hashpw(UID, BCrypt.gensalt()));
+				// System.out.println(UID);
+				// System.out.println(BCrypt.hashpw(UID, BCrypt.gensalt()));
 
-					/**
-					 * @DDS method creates a connection to Mongo DB server and
-					 *      publishes the card UID.
-					 */
-					// DDS(UID);
+				/**
+				 * @DDS method creates a connection to Mongo DB server and
+				 *      publishes the card UID.
+				 */
+				// DDS(UID);
 
-					/**
-					 * If the UID and the masterTag are the same then the
-					 * program will allow the user to add a new card to the
-					 * database for access at another time
-					 */
-					masterTag = BCrypt.checkpw(UID, AddCard.getMasterTag());
-					// if (UID.equals(masterTag)) {
-					if (masterTag == true)
-						ReadCard.Master(terminal, UID);
-					else
-						Authenticate.Access(UID, masterTag);
+				/**
+				 * If the UID and the masterTag are the same then the program
+				 * will allow the user to add a new card to the database for
+				 * access at another time
+				 */
+				masterTag = BCrypt.checkpw(UID, AddCard.getMasterTag());
+				// if (UID.equals(masterTag)) {
+				if (masterTag == true)
+					ReadCard.Master(UID);
+				else
+					Authenticate.Access(UID, masterTag);
 
-					/**
-					 * After accessing the system you can rescan any registered
-					 * badge to re-lock the system
-					 */
-					if (!lock)
-						ReadCard.reLock(lock, masterTag/*, terminal*/);
+				// lock = LockScreen.isLocked();
+				System.out.println(UID + " : " + LockScreen.isLocked());
 
-					// if(lock)
-					// ReadCard.reLock(lock, masterTag, terminal);
+				terminal.waitForCardAbsent(0);
 
-					// terminal.waitForCardAbsent(0);
+				/**
+				 * After accessing the system you can rescan any registered
+				 * badge to re-lock the system
+				 */
+				try {
+					if (!LockScreen.isLocked()) {
+						// ReadCard.Lock(masterTag, terminal);
+						// ReadCard.reLock(masterTag, terminal);
+						System.out.println(UID + " : " + LockScreen.isLocked());
+					}
+
+				} catch (Exception e) {
 				}
+
+				// else
+				// LockScreen.WindowUnlock();
+
+				// lock =!lock;
+
+				// if (lock)
+				// ReadCard.getUID();
+
+				// terminal.waitForCardPresent(0);
 			}
 
 		} catch (Throwable t) {
