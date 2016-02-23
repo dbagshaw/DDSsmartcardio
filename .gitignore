@@ -1,10 +1,6 @@
 # Windows image file caches
 Thumbs.db
-hthumbs.db
-
-# Eclipse Core
-.project
-.classpath
+ehthumbs.db
 
 # Folder config file
 Desktop.ini
