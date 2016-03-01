@@ -56,7 +56,7 @@ public class Test {
 				// take the first terminal in the list
 				terminal = (CardTerminal) terminalList.get(0);
 
-				System.out.println("Waiting for Card to be present");
+				System.out.println("Waiting for Card to be presented");
 				terminal.waitForCardPresent(0);
 
 				// establish a connection with the card
