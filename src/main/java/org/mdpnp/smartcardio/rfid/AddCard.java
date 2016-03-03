@@ -24,7 +24,8 @@ public class AddCard {
 	
 	static boolean masterTag;
 
-	static String key = "key.txt";
+//	static String key = "key.txt";
+	static String key = "C://Users//bagshawd//Documents//mdpnp//DDSsmartcardio//src//main//resources//key.txt";
 	static String database = "key_database.csv";
 	static String activity_log = "ActivityLog.csv";
 

@@ -16,6 +16,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.mdpnp.smartcardio.activity.ActivityLog;
+import org.mdpnp.smartcardio.db.EmployeeManager;
+import org.mdpnp.smartcardio.db.NotificationPopUp;
+import org.mdpnp.smartcardio.dto.CardDTO;
 import org.mdpnp.smartcardio.email.SendEmail;
 import org.mdpnp.smartcardio.rfid.SmartCardReader;
 
@@ -25,28 +28,28 @@ public class LockScreen {
 
 	static JDialog dialog = new JDialog();
 	static JButton emergency = new JButton("BREAK THE GLASS");
-	
-	static private boolean locked; //the screen is locked
+
+	static private boolean locked; // the screen is locked
 
 	static String buttonInfo1 = "This button will override the lock screen for access to the system.";
 	String buttonInfo2 = "By Using This Button, You Are Unlocking The System In An Emergency "
 			+ "And Your Credentials Will Be Logged Into A Database For Future Investigation. The "
 			+ "Supervisior Will Be Notified Immediately.";
-	
-	public static boolean isLocked(){
+
+	public static boolean isLocked() {
 		return locked;
 	}
 
 	public static void Window() {
 
 		dialog.setLayout(new BorderLayout());
-		dialog.add(buttonPanel());
 		dialog.setTitle("MD PnP ICE Supervisor");
-//		dialog.setUndecorated(true);
-//		dialog.setOpacity(0.7f);
+		dialog.setUndecorated(true);
+		dialog.setOpacity(0.7f);
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		dialog.setSize(screenSize);
+		// dialog.setSize(600, 800);
 
 		dialog.add(textPanel(), BorderLayout.CENTER);
 		dialog.add(buttonPanel(), BorderLayout.SOUTH);
@@ -54,12 +57,6 @@ public class LockScreen {
 		dialog.setResizable(false);
 		// dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		
-
-		
-		// dialog.setAlwaysOnTop(true);
-
-		
 
 	}
 
@@ -94,35 +91,32 @@ public class LockScreen {
 		return textPanel;
 	}
 
-	
-	 public static void WindowLock() {
-		 locked = true;// window is locked
-		 System.out.println("Window was locked");
-		 
-		 Window();
-		 
-	  
-		 dialog.setVisible(true);
-		 dialog.setModalityType(ModalityType.TOOLKIT_MODAL);
-	  
-		 
-	  
-	  }
-	 
+	public static void WindowLock() {
+		Window();
+
+		// dialog.setModalityType(ModalityType.TOOLKIT_MODAL);
+		dialog.setVisible(true);
+
+		locked = true;// window is locked
+		System.out.println("Window was locked");
+		
+	}
 
 	public static void WindowUnlock() {
-		
+
+		locked = false; // window is unlocked
+		System.out.println("Window was unlocked");
+
+		// dialog.setVisible(false);
+
 		/**
 		 * DISPOSE_ON_CLOSE closes the JDialog and allows the program to
 		 * continue to run. Alternatively, EXIT_ON_CLOSE closes the JDialog and
 		 * exits the program.
 		 */
-		dialog.setVisible(false);
-//		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-//		dialog.dispatchEvent(new WindowEvent(dialog, WindowEvent.WINDOW_CLOSING));
-		
-		locked = false; //window is unlocked
-		System.out.println("Window was UN-locked");
+
+		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		dialog.dispatchEvent(new WindowEvent(dialog, WindowEvent.WINDOW_CLOSING));
 
 	}
 
@@ -133,16 +127,16 @@ public class LockScreen {
 			public void run() {
 				try {
 					Thread.sleep(5000);
-					
+
 					emergency.setVisible(true);
 					dialog.validate();
-					
+
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			};
 		}.start();
-		
+
 		emergency.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				WindowUnlock();

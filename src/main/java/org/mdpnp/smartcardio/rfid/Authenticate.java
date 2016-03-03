@@ -66,7 +66,7 @@ public class Authenticate {
 
 	public static boolean AccessGranted(String UID) {
 		CardDTO cardDto = eManager.findByUID(UID);
-		LockScreen.WindowUnlock();
+		// LockScreen.WindowUnlock();
 		String username = cardDto.getUserName();
 		// NotificationPopUp.AccessGrantedNotification(ag,
 		// cardDto.getCardNumber());

@@ -32,11 +32,12 @@ public class SmartCardReader {
 
 		try {
 
-			CardTerminal terminal = null;
+			 CardTerminal terminal = null;
 
 			LockScreen.WindowLock();
 			System.out.println(LockScreen.isLocked());
 			terminal = ReadCard.TerminalSetUp();
+			
 
 			while (true) {
 
@@ -60,14 +61,14 @@ public class SmartCardReader {
 				masterTag = BCrypt.checkpw(UID, AddCard.getMasterTag());
 				// if (UID.equals(masterTag)) {
 				if (masterTag == true)
-					ReadCard.Master(UID);
+					ReadCard.Master(UID, null);
 				else
 					Authenticate.Access(UID, masterTag);
 
 				// lock = LockScreen.isLocked();
 				System.out.println(UID + " : " + LockScreen.isLocked());
 
-				terminal.waitForCardAbsent(0);
+				// terminal.waitForCardAbsent(0);
 
 				/**
 				 * After accessing the system you can rescan any registered
@@ -75,7 +76,9 @@ public class SmartCardReader {
 				 */
 				try {
 					if (!LockScreen.isLocked()) {
-						// ReadCard.Lock(masterTag, terminal);
+
+						ReadCard.Lock(masterTag, terminal);
+//						terminal.waitForCardAbsent(0);
 						// ReadCard.reLock(masterTag, terminal);
 						System.out.println(UID + " : " + LockScreen.isLocked());
 					}

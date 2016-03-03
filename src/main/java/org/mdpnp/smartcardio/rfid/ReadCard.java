@@ -21,7 +21,7 @@ import org.mindrot.jbcrypt.BCrypt;
 public class ReadCard {
 
 	static CardTerminal terminal;
-	
+
 	public static CardTerminal TerminalSetUp() {
 		// CardTerminal terminal = null;
 		String searchNotice = "Searching for Terminals...";
@@ -104,9 +104,9 @@ public class ReadCard {
 		return response;
 	}
 
-	public static void Master(String UID) {
-//		try {
-//			terminal.waitForCardAbsent(0);
+	public static void Master(String UID, CardTerminal terminal) {
+		try {
+			terminal.waitForCardAbsent(0);
 			/**
 			 * If the user wants to use the master tag to access the device then
 			 * tap again to be granted access
@@ -116,9 +116,9 @@ public class ReadCard {
 			// System.out.println("Present New Badge or Tap Again for Access");
 
 			AddCard.addCard(terminal);
-//		} catch (CardException e) {
-//			e.printStackTrace();
-//		}
+		} catch (CardException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void reLock(boolean masterTag, CardTerminal terminal) {
@@ -155,14 +155,16 @@ public class ReadCard {
 
 			// Makes UID a string variable
 			String UID = ReadCard.getUID();
-			terminal.waitForCardAbsent(2000);
+			terminal.waitForCardAbsent(0);
 			// masterTag = BCrypt.checkpw(UID, getMasterTag());
 
 			EmployeeManager eManager = new EmployeeManager();
 			CardDTO myList = eManager.findByUID(UID);
 
-			if (masterTag == true || myList != null)
+			if (masterTag == true || myList != null) {
 				LockScreen.WindowLock();
+				terminal.waitForCardAbsent(0);
+			}
 
 		} catch (Throwable t) {
 			// t.printStackTrace();
