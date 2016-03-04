@@ -24,8 +24,6 @@ import org.mdpnp.smartcardio.rfid.SmartCardReader;
 
 public class LockScreen {
 
-	// Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
 	static JDialog dialog = new JDialog();
 	static JButton emergency = new JButton("BREAK THE GLASS");
 
@@ -49,7 +47,6 @@ public class LockScreen {
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		dialog.setSize(screenSize);
-		// dialog.setSize(600, 800);
 
 		dialog.add(textPanel(), BorderLayout.CENTER);
 		dialog.add(buttonPanel(), BorderLayout.SOUTH);
@@ -62,7 +59,6 @@ public class LockScreen {
 
 	private static JPanel buttonPanel() {
 		JPanel buttonPanel = new JPanel();
-		// buttonPanel.setBackground(Color.YELLOW);
 
 		emergency.setFont(new Font("sansserif", Font.BOLD, 40));
 		emergency.setForeground(Color.WHITE);
@@ -106,8 +102,6 @@ public class LockScreen {
 
 		locked = false; // window is unlocked
 		System.out.println("Window was unlocked");
-
-		// dialog.setVisible(false);
 
 		/**
 		 * DISPOSE_ON_CLOSE closes the JDialog and allows the program to

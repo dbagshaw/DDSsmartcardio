@@ -23,8 +23,6 @@ public class CardReader {
 	private static CardChannel channel;
 	private static CardTerminal terminal = null;
 
-	// private String UID;
-
 	private static ResponseAPDU Reader() {
 
 		try {
@@ -37,12 +35,6 @@ public class CardReader {
 
 			// take the first terminal in the list
 			terminal = (CardTerminal) terminalList.get(0);
-
-			// String connectedNotice = "<html>Connected to Terminal:<br/>"
-			// + terminal + "</html>";
-			//
-			// NotificationPopUp.getInstance().terminalNotification(
-			// connectedNotice);
 
 			terminal.waitForCardPresent(0);
 
@@ -93,22 +85,16 @@ public class CardReader {
 					"Present New Badge or Tap Again for Access");
 			// System.out.println("Present New Badge or Tap Again for Access");
 
-			// AddCard.addCard(terminal);
+			AddCard.addCard(terminal);
 		} catch (CardException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public static void Lock(boolean masterTag) {
-		// Boolean lock;
-		// while (true) {
-		// lock = LockScreen.isLocked();
 		try {
-			// terminal.waitForCardPresent(0);
 			// Makes UID a string variable
 			String UID = getUID();
-			// terminal.waitForCardAbsent(0);
-			// masterTag = BCrypt.checkpw(UID, getMasterTag());
 
 			EmployeeManager eManager = new EmployeeManager();
 			CardDTO myList = eManager.findByUID(UID);
@@ -118,13 +104,12 @@ public class CardReader {
 					myList.getCardNumber());
 			System.out.print("Good Bye: " + username + ". ");
 
-			// if (!lock) {
 			if (masterTag == true || myList != null) {
 				LockScreen.WindowLock();
 				terminal.waitForCardAbsent(0);
 			}
 			terminal.waitForCardPresent(0);
-			
+
 			ActivityLog Log = new ActivityLog();
 			Log.windowLockLog(UID);
 
@@ -132,15 +117,10 @@ public class CardReader {
 			// t.printStackTrace();
 			System.out.println("Bad Read. Try Again.");
 		}
-		// }
 	}
 
 	public static void Unlock(boolean masterTag) {
-
 		try {
-
-			// terminal.waitForCardPresent(0);
-
 			String UID = getUID();
 			EmployeeManager eManager = new EmployeeManager();
 			CardDTO myList = eManager.findByUID(UID);
@@ -151,15 +131,13 @@ public class CardReader {
 			} else
 				return;
 			terminal.waitForCardPresent(0);
-			
+
 			ActivityLog Log = new ActivityLog();
 			Log.windowLockLog(UID);
 
 		} catch (CardException e) {
 			e.printStackTrace();
 		}
-
-		
 	}
 
 	private static final char wordToHexChar(byte b) {

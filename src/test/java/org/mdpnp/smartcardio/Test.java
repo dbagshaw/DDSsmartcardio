@@ -93,14 +93,11 @@ public class Test {
 					System.out.println("Could not unlock");
 
 				terminal.waitForCardPresent(0);
-				// String UID2 = bytesToHex(response.getData());
 				if (UID != null) {
 					WindowLock();
 					terminal.waitForCardAbsent(0);
 				} else
 					System.out.println("Could not lock");
-
-				CardUID = UID;
 
 			} catch (Throwable t) {
 				// t.printStackTrace();
@@ -142,7 +139,6 @@ public class Test {
 		dialog.setTitle("MD PnP ICE Supervisor");
 		dialog.setUndecorated(true);
 		dialog.setOpacity(0.7f);
-		
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		dialog.setSize(screenSize);
